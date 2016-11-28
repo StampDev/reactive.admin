@@ -1,0 +1,135 @@
+﻿.tr-fontsize {
+    font-size:18px;
+    font-weight:300
+}
+
+.tr-fontsize-15 {
+    font-size:15px;
+    font-weight:300
+}
+
+
+.selected-row {
+    border-left: 5px solid #ec4758!important
+}
+
+/*
+ * Alerts
+ */
+.alert {
+  margin-bottom: 20px;
+  margin-top: 0px;
+  padding: 5px 15px 5px 34px;
+  color: #675100;
+  border-width: 0px;
+  border-left-width: 5px;
+  padding: 10px;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+}
+.alert .close {
+  top: 0px;
+  right: -5px;
+  line-height: 20px;
+}
+.alert-heading {
+  font-weight: 600;
+}
+.alert-danger {
+  border-color: #953b39;
+  color: #ffffff;
+  background-color: #c26565;
+  text-shadow: none;
+}
+.alert-warning {
+  border-color: #dfb56c;
+  color: #826430;
+  background-color: #efe1b3;
+}
+.alert-success {
+  border-color: #8ac38b;
+  color: #356635;
+  background-color: #cde0c4;
+}
+.alert-info {
+  border-color: #9cb4c5;
+  color: #305d8c;
+  background-color: #d6dde7;
+}
+
+.emp-email-add:first-child{
+    margin-top:0
+}
+.emp-email-add > .m-b {
+    margin-bottom:1px !important
+}
+.emp-email-add {
+    margin-top: 15px
+}
+
+.no-outline {
+    outline: none !important
+}
+
+.chart-action-idle {
+    opacity:0.2
+}
+
+.select2-close-mask{
+    z-index: 2099;
+}
+.select2-dropdown{
+    z-index: 3051;
+}
+
+.select2-selection {
+    height:34px;
+}
+
+.select2-selection--single{
+    height:34px;
+}
+
+div.orgChart div.node {
+    min-width: 250px;
+}
+
+.xbtn .dropdown-menu {
+  width: 100%; 
+}
+.inline {
+    display: inline-block
+}
+
+.opacity-3 {
+    opacity: 0.3
+}
+
+.op-2 {
+    opacity: 0.2
+}
+
+.op-1 {
+    opacity: 0.1
+}
+
+.highlight {
+    background-color: #FFFF88;
+}
+
+.emp-viewform dt {
+    text-align:left;
+    font-size:15px;
+    width: auto;
+}
+
+.emp-viewform .dl-horizontal dd {
+    margin-left: 120px
+}
+
+.unseen {
+    visibility:hidden
+}
+
+

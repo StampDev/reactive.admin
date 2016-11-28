@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>QuickWave | Admin</title>
+
+    <link href="/ins/css/bootstrap.min.css" rel="stylesheet">    
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+    <link href="/ins/css/plugins/dataTables/datatables.min.css" rel="stylesheet" />
+    <link href="/ins/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="/css/waitMe.css" rel="stylesheet" />
+    <link href="/ins/css/plugins/iCheck/custom.css" rel="stylesheet" />
+    <link href="/ins/css/plugins/iCheck/skins/flat/green.css" rel="stylesheet" />
+
+    <link href="/ins/css/plugins/steps/jquery.steps.css" rel="stylesheet" />
+    <link href="/ins/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet" />
+    <link href="/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="/ins/css/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <link href="/css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+
+    <link href="//cdn.quilljs.com/1.0.3/quill.snow.css" rel="stylesheet">    <!--<link href="/css/perfect-scrollbar.css" rel="stylesheet" />-->
+    <link href="/ins/css/animate.css" rel="stylesheet">    
+
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/smrt/css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/smrt/css/smartadmin-skins.min.css">
+
+    <link rel="shortcut icon" href="/smrt/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/smrt/img/favicon/favicon.ico" type="image/x-icon">
+
+    <!-- #GOOGLE FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+    <link rel="apple-touch-icon" href="/smrt/img/splash/sptouch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/smrt/img/splash/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/smrt/img/splash/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/smrt/img/splash/touch-icon-ipad-retina.png">
+
+    <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Startup image for web apps -->
+    <link rel="apple-touch-startup-image" href="/smrt/img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+    <link rel="apple-touch-startup-image" href="/smrt/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+    <link rel="apple-touch-startup-image" href="/smrt/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+
+
+</head>
+<body>
+
+    <div id="applayout">
+
+    </div>
+
+    <script src="/js/backendless.js"></script>
+    <script src="/js/jquery-2.1.1.js"></script>
+    <script src="/ins/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+
+    <script src="/ins/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/ins/js/plugins/pace/pace.min.js"></script>
+
+    <script src="/ins/js/plugins/toastr/toastr.min.js"></script>
+
+    <script src="/js/q.js"></script>
+    <script src="/js/page.js"></script>
+    <script src="/js/lodash.js"></script>
+    <script src="/js/jquery.storageapi.js"></script>
+    <script src="/js/pubsub.js"></script>
+    <script src="/js/deepcopy.js"></script>
+    <script src="/js/chance.js"></script>
+
+    <script src="/ins/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/ins/js/plugins/dataTables/dataTables.responsive.js"></script>
+    <script src="/js/waitMe.js"></script>
+    <script src="/ins/js/plugins/staps/jquery.steps.js"></script>
+
+    <script src="/ins/js/plugins/nestable/jquery.nestable.js"></script>
+    <script src="/ins/js/plugins/iCheck/icheck.js"></script>
+
+    <script src="/js/knockout-3.debug.js"></script>
+    <script src="/js/ko.mapping.js"></script>
+    <script src="/js/breeze.debug.js"></script>
+    <script src="/js/breeze.ajax.post.js"></script>
+    <script src="/js/breeze.metadata-helper.js"></script>
+    <script src="/ins/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/ins/js/plugins/validate/jquery.validate.min.js"></script>
+
+    <script src="/js/jquery.dotdotdot.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
+    <script src="//cdn.quilljs.com/1.0.3/quill.js" type="text/javascript"></script>
+    <script src="/js/url-pattern.js"></script>
+    
+    <script src="/smrt/js/app.config.seed.js"></script>
+    <script src="/smrt/js/app.seed.js"></script>
+
+    <script>
+
+        var require = {
+            baseUrl: "/js/",
+            waitSeconds: 600,            
+        }
+
+    </script>
+
+
+    <script>
+        var app_name = 'smrt';
+    </script>
+
+    <script src="/js/core/utils.js"></script>
+    <script src="/js/require.js" data-main="qw/main.js"></script>
+
+</body>
+</html>

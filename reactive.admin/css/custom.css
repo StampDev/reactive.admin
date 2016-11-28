@@ -1,0 +1,151 @@
+﻿
+td .responsive-img {
+    max-width:100%;
+    height:auto;
+}
+
+
+span.error {
+    color:#cc5965
+}
+
+.form-control.error-val{
+    border:1px solid #cc5965
+}
+
+.form-control.validation-error{
+    border:1px solid #cc5965;
+    color:#cc5965
+}
+
+span.validation-error{
+    color:#cc5965
+}
+
+form .form-control.error {
+        border: 1px solid #cc5965;
+        color: #cc5965;
+}
+
+form input.error::-webkit-input-placeholder
+{
+    color: #cc5965;
+}
+
+form input.error::-moz-placeholder {
+    color: #cc5965;
+}
+
+form input.error:-moz-placeholder {
+    color: #cc5965;
+}
+
+form input.error:-ms-input-placeholder {
+    color: #cc5965;
+}
+
+.wizard > .content > .body select.error
+{
+    background: rgb(251, 227, 228);
+    border: 1px solid #fbc2c4;
+    color: #8a1f11;
+}
+
+label.error{
+    color: red;
+}
+
+
+.no-p {
+    padding:0!important
+}
+
+
+
+
+#custom-search-input {
+        margin:0;
+        margin-top: 10px;
+        padding: 0;
+    }
+ 
+    #custom-search-input .search-query {
+        padding-right: 3px;
+        padding-right: 4px \9;
+        padding-left: 3px;
+        padding-left: 4px \9;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+ 
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        height:50px
+    }
+ 
+    #custom-search-input button {
+        border: 0;
+        background: none;
+        /** belows styles are working good */
+        padding: 2px 5px;
+        margin-top: 2px;
+        position: relative;
+        left: -28px;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        color:#D9230F;
+    }
+ 
+    .search-query:focus + button {
+        z-index: 3;   
+    }
+
+
+    .ie-no-clear::-ms-clear {
+        display:none
+    }
+
+    /* enable absolute positioning */
+.inner-addon {
+  position: relative;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  /*pointer-events: none;*/
+}
+
+/* align glyph */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+.pointer { cursor: pointer; cursor: hand;}
+
+
+.ellip {
+  display: block;
+  height: 100%;
+}
+
+.ellip-line {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  max-width: 100%;
+}
+
+.ellip,
+.ellip-line {
+  position: relative;
+  overflow: hidden;
+}
