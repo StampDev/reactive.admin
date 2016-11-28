@@ -246,4 +246,4 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         return ChartItem;
     }(jx.views.ReactiveView));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/comp_chart.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/comp_chart.js.map

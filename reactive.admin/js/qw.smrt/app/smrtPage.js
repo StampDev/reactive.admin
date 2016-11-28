@@ -46,4 +46,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../qw.base/lib/qwp
 
 
 */ 
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.smrt/app/smrtpage.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.smrt/app/smrtpage.js.map

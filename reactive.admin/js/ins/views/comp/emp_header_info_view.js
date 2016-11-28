@@ -72,4 +72,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
     }(ui.TypeView));
     exports.EmpsHeaderInfo = EmpsHeaderInfo;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_header_info_view.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_header_info_view.js.map

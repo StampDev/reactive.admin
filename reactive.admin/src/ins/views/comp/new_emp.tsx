@@ -390,7 +390,7 @@ class RegisterEmp extends jx.views.ReactiveView {
                                 <b.InputGroup.Addon>
                                     <i className="fa fa-user"></i>
                                 </b.InputGroup.Addon>
-                                <b.FormControl type="text" name="usrsurname" required placeholder="Surname" />
+                                <b.FormControl type="text" name="surname" required placeholder="Surname" />
                             </b.InputGroup>
                             <span className="error-tag" ></span>
                         </b.FormGroup>

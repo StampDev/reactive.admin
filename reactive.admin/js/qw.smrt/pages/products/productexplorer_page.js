@@ -35,4 +35,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../../qw.base/lib/
         return ExplorerContent;
     }(ex.QwExplorer));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.smrt/pages/products/productexplorer_page.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.smrt/pages/products/productexplorer_page.js.map

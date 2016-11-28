@@ -161,4 +161,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
         return SocialLink;
     }(TextInput));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_personal_info_view.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_personal_info_view.js.map

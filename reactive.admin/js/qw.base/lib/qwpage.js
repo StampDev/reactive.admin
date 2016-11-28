@@ -41,4 +41,4 @@ define(["require", "exports", 'react-bootstrap', './qwview'], function (require,
     }(qv.QwView));
     exports.QwExplorer = QwExplorer;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwpage.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwpage.js.map

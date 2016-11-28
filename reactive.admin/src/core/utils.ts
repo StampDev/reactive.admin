@@ -919,4 +919,20 @@ module bx {
 
     }
 
+
+    export function fetchKey(model: any, key: string): Q.Promise<any> {
+
+        return fetch(model, {
+            condition: "objectId='{0}'".format(key)
+        }).then(data => {
+
+            return data.length > 0 ? data[0] : null;
+
+        }).fail(err => {
+
+            return err;
+        });
+        
+    }
+
 }

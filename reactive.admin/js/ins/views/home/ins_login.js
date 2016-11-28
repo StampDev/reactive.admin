@@ -51,4 +51,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
     }(jx.views.ReactView));
     exports.InsLoginPage = InsLoginPage;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/home/ins_login.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/home/ins_login.js.map

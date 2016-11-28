@@ -33,4 +33,4 @@ define(["require", "exports", '../qw.base/lib/qwapp'], function (require, export
     }(app.QwWaveApp));
     exports.AppBase = AppBase;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.cli/app.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.cli/app.js.map

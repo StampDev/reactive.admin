@@ -240,8 +240,8 @@ export class InsLoginPage extends jx.views.ReactView {
                 method: 'invite_new_user',
                 params: {
                     usremail: this.datacontext.email,
-                    usrname: this.datacontext.name,
-                    usrsurname: this.datacontext.surname,
+                    name: this.datacontext.name,
+                    surname: this.datacontext.surname,
                     usrstatus: 1,
                     compid: this.app.CompId,
                     deptid: _.result(dept, 'id')

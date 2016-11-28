@@ -76,11 +76,12 @@ export class EmpList extends jx.views.ReactiveView {
 
 interface EmpDatalistState extends jx.forms.ui.DataListState {
     dept_filter: EmpListFilter,
-    reload: boolean
+    reload: boolean,
+    users: any[]
 }
 interface EmpDatalistProps extends jx.forms.ui.DataListProps {
     deptid: string,
-    dept_filter?: EmpListFilter
+    dept_filter?: EmpListFilter,    
 }
 class EmpDatalist extends jx.forms.ui.DataList {
 
@@ -120,8 +121,7 @@ class EmpDatalist extends jx.forms.ui.DataList {
                     <p>Invite your employees to join Stamp</p>
                 </div>;
         }
-
-        //style={{ minHeight: 650 }}
+        
 
         var html =
             <div className="m-b-lg">
@@ -153,18 +153,22 @@ class EmpDatalist extends jx.forms.ui.DataList {
 
         if (col === 1) {
 
-            var html = <EmpRowView emp={rowData} owner={this} />;
+            var usr = _.find(this.state.users, u => _.result(u, utils.key) === _.result(rowData, 'usrid'));
+
+            var html = <EmpRowView emp={rowData} usr={usr} owner={this} />;
 
             ReactDOM.render(html, $(cell)[0]);
         }
 
-        //if (col == 2) {
+        if (col == 2) {
 
-        //    var html = <RowDeptInfo owner={this} emp={rowData}  />;
+            var usr = _.find(this.state.users, u => _.result(u, utils.key) === _.result(rowData, 'usrid'));
 
-        //    ReactDOM.render(html, $(cell)[0]);
+            var html = <RowDeptInfo owner={this} emp={rowData} usr={usr} start_by_loading={true} />;
 
-        //}
+            ReactDOM.render(html, $(cell)[0]);
+
+        }
 
     }
 
@@ -183,20 +187,26 @@ class EmpDatalist extends jx.forms.ui.DataList {
     load_data(): Q.Promise<any> {
 
         var d = Q.defer();
-        
-        var qry = new Backendless.DataQuery();
 
-        qry.condition = "compid='{0}' and deptid='{1}'".format(this.app.CompId, this.props.deptid);
+        bx.fetch('emp', {
+            condition: "compid='{0}' and deptid='{1}'".format(this.app.CompId, this.props.deptid)
+        }).then(data => {
 
-        Backendless.Persistence.of('emp').find(qry, new Backendless.Async(list => {
-            
-            d.resolve(list['data']);
-            
-        }, err => {
+            var usr_ids = _.map(data, d => {
+                return "'{0}'".format(d['usrid']);
+            }).join();
 
-            d.reject(err);
+            bx.fetch(Backendless.User, {
+                condition: "objectId in ({0})".format(usr_ids)
+            }).then(usr_list => {
 
-        }));
+                this.state.users = usr_list
+
+                d.resolve(data);
+
+            });
+
+        });
         
         return d.promise;
     }
@@ -251,7 +261,8 @@ class EmpDatalist extends jx.forms.ui.DataList {
 
 
 interface EmpRowViewProps extends jx.views.ReactiveViewProps {
-    emp: breeze.Entity
+    emp: breeze.Entity,
+    usr: any;
 }
 interface EmpRowViewState extends jx.views.ReactiveViewState {
     usr: any;
@@ -264,26 +275,12 @@ class EmpRowView extends jx.views.ReactiveView {
     constructor(props: EmpRowViewProps) {
         super(props);
         this.state.loading = true;
+        this.state.usr = props.usr;
     }
 
-    private __usr_ds: jx.data.DataSource;
-    get usr_dx(): jx.data.DataSource {
-
-        if (!this.__usr_ds) {
-            this.__usr_ds = new jx.data.DataSource('usr');
-        }
-
-        return this.__usr_ds;
-    }
 
     render() {
-
-
-        if (this.state.loading) {
-            return <i className="fa fa-spin fa-spinner" ></i>
-        }
-
-
+                
         var usr = this.state.usr;
         
 
@@ -315,7 +312,7 @@ class EmpRowView extends jx.views.ReactiveView {
                                 <h3>
                                     <a href={url}>
                                         <span className="m-r-sm" >{_.result(usr, 'name') }</span>
-                                        <span>{_.result(usr, 'name') }</span>
+                                        <span>{_.result(usr, 'surname') }</span>
                                     </a>
                                     <div>
                                         <small>{usrstatus}</small>
@@ -334,27 +331,27 @@ class EmpRowView extends jx.views.ReactiveView {
 
     on_notify() {
 
-        switch (this.current_event.action) {
+        //switch (this.current_event.action) {
 
-            case jx.constants.events.view_initialized: {
+        //    case jx.constants.events.view_initialized: {
 
-                if (this.state.loading) {
+        //        if (this.state.loading) {
 
-                    bx.fetch(Backendless.User, {
-                        condition: "objectId='{0}'".format(_.result(this.props.emp, 'usrid'))
-                    }).then(data => {
+        //            bx.fetch(Backendless.User, {
+        //                condition: "objectId='{0}'".format(_.result(this.props.emp, 'usrid'))
+        //            }).then(data => {
 
-                        this.setState({
-                            loading: false,
-                            usr: data[0]
-                        });
+        //                this.setState({
+        //                    loading: false,
+        //                    usr: data[0]
+        //                });
                         
-                    });
+        //            });
                     
-                }
+        //        }
 
-            } break;
-        }
+        //    } break;
+        //}
 
         return super.on_notify();
     }
@@ -362,10 +359,12 @@ class EmpRowView extends jx.views.ReactiveView {
 
 
 interface RowDeptInfoState extends jx.views.ReactiveViewState {
-    dept: breeze.Entity
+    dept: breeze.Entity,
+    usr: any
 }
 interface RowDeptInfoProps extends jx.views.ReactiveViewProps {
-    emp: breeze.Entity
+    emp: breeze.Entity,
+    usr: any
 }
 class RowDeptInfo extends jx.views.ReactiveView {
 
@@ -373,8 +372,8 @@ class RowDeptInfo extends jx.views.ReactiveView {
     state: RowDeptInfoState;
 
     constructor(props: RowDeptInfoProps) {
-        super(props);
-        this.state.loading = true;
+        super(props);        
+        this.state.usr = props.usr;
     }
 
     render() {
@@ -411,19 +410,15 @@ class RowDeptInfo extends jx.views.ReactiveView {
 
                 if (this.state.loading) {
 
-                    var ds = new jx.data.DataSource('compdept');
+                    bx.fetchKey('compdept', _.result(this.props.emp, 'deptid'))
+                        .then(__dept => {
 
-                    ds.exec_query({
-                        where: { id: _.result(this.props.emp, 'deptid') }
-                    }).then(() => {
-
-                        this.newState({
-                            loading: false,
-                            dept: ds.findkey(_.result(this.props.emp, 'deptid'))
-                        });
-
+                            this.newState({
+                                loading: false,
+                                dept: __dept
+                            }); 
                     })
-
+                    
                 }
 
 

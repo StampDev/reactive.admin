@@ -47,4 +47,4 @@ define(["require", "exports"], function (require, exports) {
         local_1.remove = remove;
     })(local = exports.local || (exports.local = {}));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwlib.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwlib.js.map

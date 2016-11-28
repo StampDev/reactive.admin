@@ -187,4 +187,4 @@ define(["require", "exports", 'react', '../../../core/lib', '../lib/lightexplore
     }(li.LightExplorerDatalist_View));
     exports.ProfSkillsDatalist = ProfSkillsDatalist;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/skills/skills_explorer.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/skills/skills_explorer.js.map

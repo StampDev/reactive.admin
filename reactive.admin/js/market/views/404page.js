@@ -21,4 +21,4 @@ define(["require", "exports", 'react', '../../core/lib'], function (require, exp
     }(jx.views.ReactView));
     exports.Page404 = Page404;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/market/views/404page.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/market/views/404page.js.map

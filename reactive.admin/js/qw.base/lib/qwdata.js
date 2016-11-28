@@ -178,4 +178,4 @@ define(["require", "exports"], function (require, exports) {
         Store_1.register_entity_defs = register_entity_defs;
     })(Store = exports.Store || (exports.Store = {}));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwdata.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwdata.js.map

@@ -65,7 +65,6 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
                 content =
                     React.createElement("div", {className: "alert alert-info"}, React.createElement("h3", {className: "m-l-xs"}, "No employee has been added to this department yet"), React.createElement("p", null, "Invite your employees to join Stamp"));
             }
-            //style={{ minHeight: 650 }}
             var html = React.createElement("div", {className: "m-b-lg"}, content);
             return html;
         };
@@ -88,13 +87,15 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         });
         EmpDatalist.prototype.createdCell = function (cell, cellData, rowData, row, col) {
             if (col === 1) {
-                var html = React.createElement(EmpRowView, {emp: rowData, owner: this});
+                var usr = _.find(this.state.users, function (u) { return _.result(u, utils.key) === _.result(rowData, 'usrid'); });
+                var html = React.createElement(EmpRowView, {emp: rowData, usr: usr, owner: this});
                 ReactDOM.render(html, $(cell)[0]);
             }
-            //if (col == 2) {
-            //    var html = <RowDeptInfo owner={this} emp={rowData}  />;
-            //    ReactDOM.render(html, $(cell)[0]);
-            //}
+            if (col == 2) {
+                var usr = _.find(this.state.users, function (u) { return _.result(u, utils.key) === _.result(rowData, 'usrid'); });
+                var html = React.createElement(RowDeptInfo, {owner: this, emp: rowData, usr: usr, start_by_loading: true});
+                ReactDOM.render(html, $(cell)[0]);
+            }
         };
         EmpDatalist.prototype.createdRow = function (row, data, dataIndex) {
             _super.prototype.createdRow.call(this, row, data, dataIndex);
@@ -102,14 +103,21 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
             $(row).css('height', '80px');
         };
         EmpDatalist.prototype.load_data = function () {
+            var _this = this;
             var d = Q.defer();
-            var qry = new Backendless.DataQuery();
-            qry.condition = "compid='{0}' and deptid='{1}'".format(this.app.CompId, this.props.deptid);
-            Backendless.Persistence.of('emp').find(qry, new Backendless.Async(function (list) {
-                d.resolve(list['data']);
-            }, function (err) {
-                d.reject(err);
-            }));
+            bx.fetch('emp', {
+                condition: "compid='{0}' and deptid='{1}'".format(this.app.CompId, this.props.deptid)
+            }).then(function (data) {
+                var usr_ids = _.map(data, function (d) {
+                    return "'{0}'".format(d['usrid']);
+                }).join();
+                bx.fetch(Backendless.User, {
+                    condition: "objectId in ({0})".format(usr_ids)
+                }).then(function (usr_list) {
+                    _this.state.users = usr_list;
+                    d.resolve(data);
+                });
+            });
             return d.promise;
         };
         EmpDatalist.prototype.on_notify = function () {
@@ -146,21 +154,9 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         function EmpRowView(props) {
             _super.call(this, props);
             this.state.loading = true;
+            this.state.usr = props.usr;
         }
-        Object.defineProperty(EmpRowView.prototype, "usr_dx", {
-            get: function () {
-                if (!this.__usr_ds) {
-                    this.__usr_ds = new jx.data.DataSource('usr');
-                }
-                return this.__usr_ds;
-            },
-            enumerable: true,
-            configurable: true
-        });
         EmpRowView.prototype.render = function () {
-            if (this.state.loading) {
-                return React.createElement("i", {className: "fa fa-spin fa-spinner"});
-            }
             var usr = this.state.usr;
             var usrstatus = 'Status: pending';
             switch (_.result(usr, 'usrstatus')) {
@@ -171,27 +167,24 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
                     break;
             }
             var url = '/company/employees/employee/{0}'.format(_.result(this.props.emp, 'objectId'));
-            var html = React.createElement("div", null, React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, React.createElement("span", {className: "glyphicon glyphicon-user m-r-md", style: { fontSize: '3em' }})), React.createElement("td", null, React.createElement("h3", null, React.createElement("a", {href: url}, React.createElement("span", {className: "m-r-sm"}, _.result(usr, 'name')), React.createElement("span", null, _.result(usr, 'name'))), React.createElement("div", null, React.createElement("small", null, usrstatus))))))));
+            var html = React.createElement("div", null, React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, React.createElement("span", {className: "glyphicon glyphicon-user m-r-md", style: { fontSize: '3em' }})), React.createElement("td", null, React.createElement("h3", null, React.createElement("a", {href: url}, React.createElement("span", {className: "m-r-sm"}, _.result(usr, 'name')), React.createElement("span", null, _.result(usr, 'surname'))), React.createElement("div", null, React.createElement("small", null, usrstatus))))))));
             return html;
         };
         EmpRowView.prototype.on_notify = function () {
-            var _this = this;
-            switch (this.current_event.action) {
-                case jx.constants.events.view_initialized:
-                    {
-                        if (this.state.loading) {
-                            bx.fetch(Backendless.User, {
-                                condition: "objectId='{0}'".format(_.result(this.props.emp, 'usrid'))
-                            }).then(function (data) {
-                                _this.setState({
-                                    loading: false,
-                                    usr: data[0]
-                                });
-                            });
-                        }
-                    }
-                    break;
-            }
+            //switch (this.current_event.action) {
+            //    case jx.constants.events.view_initialized: {
+            //        if (this.state.loading) {
+            //            bx.fetch(Backendless.User, {
+            //                condition: "objectId='{0}'".format(_.result(this.props.emp, 'usrid'))
+            //            }).then(data => {
+            //                this.setState({
+            //                    loading: false,
+            //                    usr: data[0]
+            //                });
+            //            });
+            //        }
+            //    } break;
+            //}
             return _super.prototype.on_notify.call(this);
         };
         return EmpRowView;
@@ -200,7 +193,7 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         __extends(RowDeptInfo, _super);
         function RowDeptInfo(props) {
             _super.call(this, props);
-            this.state.loading = true;
+            this.state.usr = props.usr;
         }
         RowDeptInfo.prototype.render = function () {
             if (this.state.loading) {
@@ -215,13 +208,11 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
                 case jx.constants.events.view_initialized:
                     {
                         if (this.state.loading) {
-                            var ds = new jx.data.DataSource('compdept');
-                            ds.exec_query({
-                                where: { id: _.result(this.props.emp, 'deptid') }
-                            }).then(function () {
+                            bx.fetchKey('compdept', _.result(this.props.emp, 'deptid'))
+                                .then(function (__dept) {
                                 _this.newState({
                                     loading: false,
-                                    dept: ds.findkey(_.result(_this.props.emp, 'deptid'))
+                                    dept: __dept
                                 });
                             });
                         }
@@ -233,4 +224,4 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         return RowDeptInfo;
     }(jx.views.ReactiveView));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_list.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_list.js.map

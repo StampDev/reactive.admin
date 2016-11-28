@@ -603,5 +603,15 @@ var bx;
         return d.promise;
     }
     bx.fetch = fetch;
+    function fetchKey(model, key) {
+        return fetch(model, {
+            condition: "objectId='{0}'".format(key)
+        }).then(function (data) {
+            return data.length > 0 ? data[0] : null;
+        }).fail(function (err) {
+            return err;
+        });
+    }
+    bx.fetchKey = fetchKey;
 })(bx || (bx = {}));
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/core/utils.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/core/utils.js.map

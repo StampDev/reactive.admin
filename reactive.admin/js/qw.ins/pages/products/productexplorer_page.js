@@ -34,4 +34,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../app/inspage', '
         return ExplorerContent;
     }(ex.QwExplorer));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.ins/pages/products/productexplorer_page.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.ins/pages/products/productexplorer_page.js.map

@@ -220,4 +220,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../../core/lib', '
         return ProfileEditDataList;
     }(acts.ProfileActivsDatalist));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_activs.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_activs.js.map

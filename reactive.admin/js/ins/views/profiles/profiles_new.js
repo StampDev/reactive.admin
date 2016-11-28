@@ -281,4 +281,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
         return ProfileActivitiesPage;
     }(ProfileWizardPage));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profiles_new.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profiles_new.js.map

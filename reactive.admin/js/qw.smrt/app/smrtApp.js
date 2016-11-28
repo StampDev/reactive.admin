@@ -35,4 +35,4 @@ define(["require", "exports", 'react', '../../qw.cli/app', './smrtpage'], functi
     }(cli.AppBase));
     exports.SmartApp = SmartApp;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.smrt/app/smrtApp.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.smrt/app/smrtApp.js.map

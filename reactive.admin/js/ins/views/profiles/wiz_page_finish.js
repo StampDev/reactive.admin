@@ -148,4 +148,4 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
     </ListGroupItem>
   </ListGroup>
 */ 
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/wiz_page_finish.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/wiz_page_finish.js.map

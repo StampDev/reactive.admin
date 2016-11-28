@@ -14,4 +14,4 @@ define(["require", "exports", '../qw.smrt/app/smrtapp', '../qw.ins/app/insapp'],
         app_ins.Start();
     }
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.base/main.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.base/main.js.map

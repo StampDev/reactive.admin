@@ -224,4 +224,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
     }(jx.views.ReactiveView));
     exports.CompDeptView = CompDeptView;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/comp_deptview.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/comp_deptview.js.map

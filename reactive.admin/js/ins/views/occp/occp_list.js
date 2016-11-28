@@ -184,4 +184,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
         return ListItem;
     }(jx.views.ReactiveView));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/occp/occp_list.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/occp/occp_list.js.map

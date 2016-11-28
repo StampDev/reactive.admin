@@ -104,8 +104,8 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
                     method: 'invite_new_user',
                     params: {
                         usremail: _this.datacontext.email,
-                        usrname: _this.datacontext.name,
-                        usrsurname: _this.datacontext.surname,
+                        name: _this.datacontext.name,
+                        surname: _this.datacontext.surname,
                         usrstatus: 1,
                         compid: _this.app.CompId,
                         deptid: _.result(dept, 'id')
@@ -125,4 +125,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
     }(jx.views.ReactView));
     exports.InsLoginPage = InsLoginPage;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/home/ins_register.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/home/ins_register.js.map

@@ -4,4 +4,4 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwtypes.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwtypes.js.map

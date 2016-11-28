@@ -367,4 +367,4 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
     }(jx.forms.ui.DataList));
     exports.Datalist_Find = Datalist_Find;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/lib/emp_explorer.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/lib/emp_explorer.js.map

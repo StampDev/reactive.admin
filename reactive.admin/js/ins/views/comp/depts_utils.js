@@ -169,4 +169,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
     }(jx.views.ReactiveView));
     exports.DeptHierarchyView = DeptHierarchyView;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/depts_utils.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/depts_utils.js.map

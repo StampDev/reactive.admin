@@ -2555,4 +2555,4 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
         datastore.create_entity_def = create_entity_def;
     })(datastore = exports.datastore || (exports.datastore = {}));
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/core/lib.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/core/lib.js.map

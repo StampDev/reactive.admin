@@ -19,4 +19,4 @@ define(["require", "exports", 'react-bootstrap', '../../app/smrtpage'], function
     }(sm.SmartPage));
     exports.SmartHomePage = SmartHomePage;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.smrt/pages/home/smrt-homepage.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.smrt/pages/home/smrt-homepage.js.map

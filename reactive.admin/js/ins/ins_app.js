@@ -92,4 +92,4 @@ define(["require", "exports", 'react', '../core/lib'], function (require, export
     }(jx.app.Application));
     exports.InsApp = InsApp;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/ins_app.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/ins_app.js.map

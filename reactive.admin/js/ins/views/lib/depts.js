@@ -27,4 +27,4 @@ define(["require", "exports", '../../../core/lib'], function (require, exports, 
     }(jx.data.DataSource));
     exports.Depts = Depts;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/lib/depts.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/lib/depts.js.map

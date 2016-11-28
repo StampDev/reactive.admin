@@ -35,4 +35,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../qw.base/lib/qwp
     }(page.QwAppMenus));
     exports.SmrtMenus = SmrtMenus;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.smrt/app/smrtmenus.js.map
+//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.smrt/app/smrtmenus.js.map
