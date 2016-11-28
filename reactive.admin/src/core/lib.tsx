@@ -461,10 +461,10 @@ export module views {
         }
 
 
-        private _ds: data.DataSource;
-        get ds(): data.DataSource {
+        private _ds: bx.DataSource;
+        get ds(): bx.DataSource {
             if (!this._ds) {
-                this._ds = new data.DataSource(this.get_model());
+                this._ds = new bx.DataSource(this.get_model());
             }
             return this._ds;
         }
@@ -582,6 +582,7 @@ export module views {
                 }
 
             }
+
             return null;
         }
 
@@ -620,8 +621,7 @@ export module views {
                             var pk = type.dataProperties.filter(prop => {
                                 return prop.isPartOfKey;
                             })[0];
-
-
+                            
                             var qry: data.DataQuery = {
                                 where: { [pk.name]: { eq: this.props.id } }
                             }
@@ -3726,6 +3726,10 @@ export module bx {
 
 
         fetch_metadata(): Q.Promise<any> {
+
+            if (datastore.store.hasMetadataFor(this.model)) {
+                return Q.resolve(true);
+            }
 
             var d = Q.defer();
 

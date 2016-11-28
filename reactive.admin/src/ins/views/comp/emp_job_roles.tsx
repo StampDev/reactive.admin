@@ -19,12 +19,19 @@ interface EmpJobExplorerState extends jx.views.ReactiveViewState {
 export class EmpJobExplorer extends jx.views.ReactiveView {
 
     constructor(props: EmpJobExplorerProps) {
-        super(props);
-        this.state.data = this.props.emp['jbr'];
+        super(props);        
     }
 
     props: EmpJobExplorerProps;
     state: EmpJobExplorerState;
+
+    private __ds: jx.bx.DataSource;
+    get ds(): jx.bx.DataSource {
+        if (!this.__ds) {
+            this.__ds = new jx.bx.DataSource('jbr');
+        }
+        return this.__ds;
+    }
 
 
     get is_new(): boolean {
@@ -33,6 +40,10 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
 
 
     render() {
+
+        if (this.state.loading) {
+            return <i className="fa fa-spin fa-spinner fa-2x" ></i>
+        }
 
         var data = this.state.data;
         
@@ -73,16 +84,16 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
 
             var topborder = key === 1 ? 'no-top-border' : '';
 
-            var date_from = _.result(d, 'jobstartdate') ? moment(_.result(d, 'jobstartdate')).format('MMM-YYYY') : '';
-            var date_to = _.result(d, 'jobenddate') ? moment(_.result(d, 'jobenddate')).format('MMM-YYYY') : '';
-            var duration = moment(_.result(d, 'jobstartdate')).fromNow();
+            var date_from = _.result(d, 'jbrstartdate') ? moment(_.result(d, 'jbrstartdate')).format('MMM-YYYY') : '';
+            var date_to = _.result(d, 'jbrenddate') ? moment(_.result(d, 'jbrenddate')).format('MMM-YYYY') : '';
+            var duration = moment(_.result(d, 'jbrstartdate')).fromNow();
 
             var dates:any = "{0}".format(date_from);
             if (date_to) {
                 dates = <span> <span className="m-r-sm">{date_from}</span> <span className="m-r-sm">-</span> <span>{date_to}</span> </span>;
 
-                var start = moment(_.result(d, 'jobstartdate'));
-                var end = moment(_.result(d, 'jobenddate'));
+                var start = moment(_.result(d, 'jbrstartdate'));
+                var end = moment(_.result(d, 'jbrenddate'));
                 
                 duration = moment.duration(end.diff(start)).humanize();                
             }
@@ -97,7 +108,7 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
                 company = <span><i className="fa fa-home"></i> {company}</span>;
             }
 
-            var id = _.result(d, 'id');
+            var id = _.result(d, utils.key);
 
             var html =
                 <div className="timeline-item" key={key++} data-keyid={id}>
@@ -110,7 +121,7 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
 
                                 <b.Col lg={12} style={{height:42}}>
                                     <h3>
-                                        <span className="text-success jbrdescr">{_.result(d, 'jobdescr') }</span>
+                                        <span className="text-success jbrdescr">{_.result(d, 'jbrdescr') }</span>
                                         <button className="btn btn-primary btn-outline btn-xs btn-action op-1 m-l-lg m-r-xs">
                                             <i className="fa fa-edit"></i> edit
                                         </button>
@@ -140,7 +151,7 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
                                 </b.Col>                                 
                             </b.Row>
                             <br />
-                            <p>{_.result(d,'jobnotes')}</p>
+                            <p>{_.result(d,'jbrnotes')}</p>
                     </b.Col>
 
                     </b.Row>
@@ -160,24 +171,11 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
         switch (this.current_event.action) {
 
             case jx.constants.events.view_initialized: {
-
-                this.root.find('.btn-delete').click((e: Event) => {
-
-                    var id = $(e.currentTarget).closest('.timeline-item').attr('data-keyid');
-
-                    this.delete_jbr(id);
-
-                });
                 
-                this.root.find('.jbr-content').hover(function () {
+                if (this.state.loading) {
+                    this._load();
+                }
 
-                    $(this).find('.btn-action').toggleClass('op-1');
-
-                }, function() {
-
-                    $(this).find('.btn-action').toggleClass('op-1');
-
-                });
 
             } break;
 
@@ -191,40 +189,22 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
 
         utils.ask_question('Are you sure you want to delete this item?')
         .then((ok) => {
-
-            var ds = new jx.data.DataSource('emp');
-
-            ds.dm.importEntities(this.props.emp.entityAspect.entityManager.exportEntities());
             
-            var obj: breeze.Entity = _.find(ds.dm.getEntities('jbr'), d => {
-                return _.result(d, 'id') === id;
+            var obj: breeze.Entity = _.find(this.ds.dm.getEntities('jbr'), d => {
+                return _.result(d, utils.key) === id;
             }) as any;
 
             obj.entityAspect.setDeleted();
 
             utils.spin(this.root);
 
-            ds.saveChanges().then(() => {
+            this.ds.saveChanges().then(() => {
 
                 toastr.success('Datat successfully deleted');
 
-                ds.dm.clear();
-
-                ds.exec_query({
-                    where: {
-                        'id': _.result(this.props.emp, 'id')                        
-                    },
-                    expand:['jbr']
-                }).then(list => {
-
-                    var __list = ds.dm.getEntities('jbr');
-
-                    this.newState({
-                        data: __list
-                    });
-
+                this.newState({
+                    data: this.ds.dm.getEntities()
                 });
-
                 
 
             }).fail(err => {
@@ -245,18 +225,72 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
     add_new_job(e: Event) {
 
         e.preventDefault();
-
+        
         jx.modal.Show({
             inmodal: true,
             icon: <i className="fa fa-user-circle-o modal-icon" ></i>,
             bsSize:'lg',
             title: 'Add a new job position',
             content: (modal: jx.modal.Modal) => {
-                return <EmpJobRoleView owner={this} modal={modal} autoinsert={true} emp={this.props.emp} />
+                return <EmpJobRoleView owner={this} modal={modal} autoinsert={true} start_by_loading={true} emp={this.props.emp} />
             }
         });
 
         $('.modal-body').addClass('col-lg-12');
+    }
+
+
+    reload() {
+
+        this.setState({
+            loading: true
+        }, () => {
+
+            this._load();
+
+        })
+
+    }
+
+
+    private _load() {
+
+        var d = Q.defer();
+
+        this.ds.dm.clear();
+
+        this.ds.fetch_data({
+            condition: "empid='{0}'".format(_.result(this.props.emp, utils.key))
+        }).then(data => {
+
+            this.setState({
+                loading: false,
+                data: data
+            }, () => {
+
+                this.root.find('.btn-delete').click((e: Event) => {
+
+                    var id = $(e.currentTarget).closest('.timeline-item').attr('data-keyid');
+
+                    this.delete_jbr(id);
+
+                });
+
+                this.root.find('.jbr-content').hover(function () {
+
+                    $(this).find('.btn-action').toggleClass('op-1');
+
+                }, function () {
+
+                    $(this).find('.btn-action').toggleClass('op-1');
+
+                });
+
+            });
+        });
+
+        return d.promise;
+
     }
 }
 
@@ -302,7 +336,7 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
         return {
             compid: this.app.CompId,
             deptid: _.result(this.props.emp, 'deptid'),
-            empid: _.result(this.props.emp, 'id')
+            empid: _.result(this.props.emp, utils.key)
         };
     }
 
@@ -319,6 +353,8 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
 
             toastr.success('Data saved successfully');
 
+            this.props.owner['reload']();
+
             this.props.modal.close();
 
         }).fail(err => {
@@ -334,18 +370,21 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
 
     load_data(qry?: jx.data.DataQuery) {
 
-        //this.ds.dm.clear();
-
-        //this.ds.dm.importEntities(this.props.emp.entityAspect.entityManager.exportEntities());
-
-        return Q.resolve(this.ds.dm.getEntities('jbr'));
+        return this.ds.fetch_metadata().then(() => {
+            return Q.resolve(this.ds.dm.getEntities('jbr'));
+        });
+        
     }
 
 
     render() {
 
-        var default_jobstart = this.item ? _.result(this.item, 'jobstartdate') : '';
-        var default_jobend = this.item ? _.result(this.item, 'jobenddate') : '';
+        if (this.state.loading) {
+            return <i className="fa fa-spin fa-spinner fa-2x" ></i>
+        }
+
+        var default_jobstart = this.item ? _.result(this.item, 'jbrstartdate') : '';
+        var default_jobend = this.item ? _.result(this.item, 'jbrenddate') : '';
 
         var html =
             <b.Row>
@@ -358,7 +397,7 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
                             label='Job role description'
                             icon='fa-pencil-square-o'
                             placeholder='Job description'
-                            property='jobdescr'
+                            property='jbrdescr'
                             />  
                                               
                     </b.Col>
@@ -393,7 +432,7 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
 
                         <h2>Job start</h2>
 
-                        <div className="form-group date-ctrl" data-prop="jobstartdate">
+                        <div className="form-group date-ctrl" data-prop="jbrstartdate">
                             <div className="input-group date">
                                 <span className="input-group-addon"><i className="fa fa-calendar" /></span>
                                 <input type="text" className="form-control" defaultValue={default_jobstart} />
@@ -405,7 +444,7 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
 
                         <h2><span>Job end</span> <span className="text-success">(optional) </span></h2>
 
-                        <div className="form-group date-ctrl" data-prop="jobenddate">
+                        <div className="form-group date-ctrl" data-prop="jbrenddate">
                             <div className="input-group date">
                                 <span className="input-group-addon"><i className="fa fa-calendar" />
                                 </span><input type="text" className="form-control" defaultValue={default_jobend}/>
@@ -434,7 +473,17 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
         switch (this.current_event.action) {
 
             case jx.constants.events.view_initialized: {
-                
+
+                return this.load_data().then(() => {
+
+                    return super.on_notify();
+                })
+
+            };
+
+
+            case jx.constants.events.view_data_loaded: {
+
                 this.root.find('.date-ctrl .input-group.date')['datepicker']({
                     format: "mm-yyyy",
                     startView: "months",
@@ -443,16 +492,12 @@ class EmpJobRoleView extends jx.views.ReactiveEditDataView {
                 }).on('changeDate', (ev: any) => {
 
                     var property = $(ev.currentTarget).closest('[data-prop]').attr('data-prop');
-                    this.item[property](ev.date);                    
+                    this.item[property](ev.date);
 
                 });
 
-
-            } break;
-
-
-            case jx.constants.events.view_data_loaded: {
                 ko.applyBindings(this.item, this.root.find('form')[0]);
+
             } break;
 
         }

@@ -251,7 +251,7 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
             Object.defineProperty(ReactiveDataView.prototype, "ds", {
                 get: function () {
                     if (!this._ds) {
-                        this._ds = new data.DataSource(this.get_model());
+                        this._ds = new bx.DataSource(this.get_model());
                     }
                     return this._ds;
                 },
@@ -2227,6 +2227,9 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
             };
             DataSource.prototype.fetch_metadata = function () {
                 var _this = this;
+                if (datastore.store.hasMetadataFor(this.model)) {
+                    return Q.resolve(true);
+                }
                 var d = Q.defer();
                 this.fetch_and_store_meta(this.model, null).then(function (type) {
                     datastore.create_entity_def(type);

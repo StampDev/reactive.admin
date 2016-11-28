@@ -88,11 +88,15 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
                         d.resolve(true);
                     }, function (err) {
                         toastr.error(JSON.stringify(err));
+                        d.reject(err);
                     }));
                 }, function (err) {
+                    toastr.error(JSON.stringify(err));
+                    d.reject(err);
                 }));
             }, function (err) {
                 toastr.error(JSON.stringify(err));
+                d.reject(err);
             }));
             return d.promise;
         };

@@ -53,9 +53,9 @@ export class EmpProfessionalInfo extends jx.views.ReactiveView {
                                 <b.Tab eventKey={1} title="Experience history">
 
                                     <br />
-                                    {/*
-                                    <EmpJobExplorer owner={this} emp={this.props.emp} />
-                                    */}
+
+                                    <EmpJobExplorer owner={this} start_by_loading={true} emp={this.props.emp} />
+                                    
 
                                 </b.Tab>
 

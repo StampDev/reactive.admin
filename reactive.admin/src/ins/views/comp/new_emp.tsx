@@ -154,17 +154,24 @@ export class NewEmployeeView extends jx.views.ReactiveView {
                     }, err => {
 
                         toastr.error(JSON.stringify(err));
+
+                        d.reject(err);
                     }));
 
 
             }, err => {
 
+                toastr.error(JSON.stringify(err));
+
+                d.reject(err);
 
             }));
             
         }, err => {
 
             toastr.error(JSON.stringify(err));
+
+            d.reject(err);
 
         }));
 
