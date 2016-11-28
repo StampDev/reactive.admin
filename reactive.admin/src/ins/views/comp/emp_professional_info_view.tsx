@@ -70,12 +70,10 @@ export class EmpProfessionalInfo extends jx.views.ReactiveView {
                                 <b.Tab eventKey={3} title="Skills">
 
                                     <br />
-                                    
-                                    {/*
-                                    <EmpSkillsExplorer owner={this} emp={this.props.emp} />
-                                    */}
+                                                                        
+                                    <EmpSkillsExplorer owner={this} emp={this.props.emp} usr={this.props.usr}/>
+                                   
                 
-
                                 </b.Tab>
                                 
                             </b.Tabs>
@@ -317,7 +315,7 @@ class EmpSkillsExplorer extends EmpExplorer {
 
         var _not_in = undefined;
 
-        var exclude_ids: any[] = _.map(dt.props.usr['usrs'](), s => _.result(s, 'sklsid'));
+        var exclude_ids: any[] = _.map(dt.props.exclusions, s => _.result(s, 'sklsid'));
 
         if (exclude_ids && exclude_ids.length > 0) {
 

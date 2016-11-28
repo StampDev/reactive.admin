@@ -16,7 +16,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
             _super.apply(this, arguments);
         }
         EmpProfessionalInfo.prototype.render = function () {
-            var html = React.createElement("div", null, React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement("div", {className: "m-b-md"}, React.createElement("h2", null, "Professional profile")))), React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12}, React.createElement(EmpStatistics, null))), React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement(jx.views.TabControl, null, React.createElement(b.Tabs, {defaultActiveKey: 1, id: "tabs"}, React.createElement(b.Tab, {eventKey: 1, title: "Experience history"}, React.createElement("br", null)), React.createElement(b.Tab, {eventKey: 2, title: "Activities"}, React.createElement("br", null), React.createElement(EmpActsExplorer, {owner: this, emp: this.props.emp, usr: this.props.usr})), React.createElement(b.Tab, {eventKey: 3, title: "Skills"}, React.createElement("br", null)))))));
+            var html = React.createElement("div", null, React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement("div", {className: "m-b-md"}, React.createElement("h2", null, "Professional profile")))), React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12}, React.createElement(EmpStatistics, null))), React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement(jx.views.TabControl, null, React.createElement(b.Tabs, {defaultActiveKey: 1, id: "tabs"}, React.createElement(b.Tab, {eventKey: 1, title: "Experience history"}, React.createElement("br", null)), React.createElement(b.Tab, {eventKey: 2, title: "Activities"}, React.createElement("br", null), React.createElement(EmpActsExplorer, {owner: this, emp: this.props.emp, usr: this.props.usr})), React.createElement(b.Tab, {eventKey: 3, title: "Skills"}, React.createElement("br", null), React.createElement(EmpSkillsExplorer, {owner: this, emp: this.props.emp, usr: this.props.usr})))))));
             return html;
         };
         return EmpProfessionalInfo;
@@ -158,7 +158,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
                 }
             }
             var _not_in = undefined;
-            var exclude_ids = _.map(dt.props.usr['usrs'](), function (s) { return _.result(s, 'sklsid'); });
+            var exclude_ids = _.map(dt.props.exclusions, function (s) { return _.result(s, 'sklsid'); });
             if (exclude_ids && exclude_ids.length > 0) {
                 _.each(exclude_ids, function (id) {
                     if (!_not_in) {
