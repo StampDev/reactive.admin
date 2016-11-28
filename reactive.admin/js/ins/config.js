@@ -10,4 +10,4 @@ define(["require", "exports"], function (require, exports) {
         BACKENDLESS_VERID: 'V1'
     };
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/config.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/config.js.map

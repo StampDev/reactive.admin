@@ -48,4 +48,4 @@ define(["require", "exports", 'react', '../../core/lib', './ins_page_menus', './
     }(jx.views.BaseMasterPage));
     exports.InsMasterPage = InsMasterPage;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/lib/ins_master_page.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/lib/ins_master_page.js.map

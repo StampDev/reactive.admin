@@ -62,10 +62,7 @@ class EmpViewForm extends jx.views.ReactiveView {
 
                     return emp;
 
-                });
-
-            
-
+                });            
         });
         
     }

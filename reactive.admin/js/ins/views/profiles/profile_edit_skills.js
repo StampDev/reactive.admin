@@ -209,4 +209,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../../core/lib', '
         return ProfileEditSkillsDataList;
     }(skills.ProfSkillsDatalist));
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_skills.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_skills.js.map

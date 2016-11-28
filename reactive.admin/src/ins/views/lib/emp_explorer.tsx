@@ -15,15 +15,18 @@ import { OccpTreeView } from '../profiles/profile_occptree';
 
 
 export interface EmpExplorerProps extends jx.views.ReactiveViewProps {
-    emp: breeze.Entity
+    emp: breeze.Entity,
+    usr: breeze.Entity
 }
 export class EmpExplorer extends jx.views.ReactiveView {
     
     props: EmpExplorerProps;
-    
+
+
     get usr(): breeze.Entity{
-        return (this.refs['listing'] as DataListing).usr;
+        return this.props.usr;
     }
+
 
     get listing(): DataListing {
         return (this.refs['listing'] as DataListing);
@@ -93,19 +96,21 @@ export class EmpExplorer extends jx.views.ReactiveView {
         var d = Q.defer();
 
         utils.spin(this.root);
-        
-        var obj: breeze.Entity = _.find(this.usr[this.get_detail_table()](), d => {
+
+        var ds = new jx.bx.DataSource(this.get_detail_table());
+
+        ds.dm.importEntities(this.listing.ds.dm.exportEntities());
+
+        var __data = ds.dm.getEntities(this.get_detail_table());
+
+        var obj: breeze.Entity = _.find(__data, d => {
             return _.result(d, this.get_detail_field()) === id;
         }) as any;
 
         if (obj) {
             obj.entityAspect.setDeleted();
         }
-
-        var ds = new jx.data.DataSource('usr');
-
-        ds.dm.importEntities(this.usr.entityAspect.entityManager.exportEntities());
-
+        
         ds.saveChanges().then(() => {
 
             toastr.success('Data saved successfully');
@@ -135,12 +140,13 @@ export class EmpExplorer extends jx.views.ReactiveView {
             title: this.get_select_title(),
             content: (modal: jx.modal.Modal) => {
 
-                var exclusion = this.usr[this.get_detail_table()]();
-
+                var exclusions = this.listing.ds.dm.getEntities(this.get_detail_table());
+                
                 return <Datalist_Find owner={this}
                     modal={modal} ref='dt_find'
                     scroll_height={680}
-                    usr={this.usr}                
+                    usr={this.usr}
+                    exclusions={exclusions}          
                     lookup_table={this.get_lookup_table() }
                     lookup_field={this.get_lookup_field() }
                     exec_paging={this.get_exec_paging}
@@ -148,86 +154,81 @@ export class EmpExplorer extends jx.views.ReactiveView {
             }
         });
     }
-        
+
+
     get_title(): string {
         return null;
     }
+
 
     get_select_title() {
         return null
     }
 
+
     get_detail_field(): string {
         return null;
     }
+
 
     get_detail_table() {
         return null;
     }
 
+
     get_lookup_table() {
         return null;
     }
+
 
     get_lookup_field() {
         return null;
     }
 
+
     get_exec_paging(dt: Datalist_Find, req, draw, setts) {
         return null;
     }
+
 
     store_selection(ids: any[]) {
 
         var d = Q.defer();
 
-        var ds = new jx.data.DataSource('usr');
+        var ds = new jx.bx.DataSource(this.get_detail_table());
 
         utils.spin(this.root);
 
-        ds.exec_query({
-            where: {
-                id: _.result(this.props.emp, 'usrid')
-            },
-            expand: [this.get_detail_table()]
-        }).then(() => {
+        _.each(ids, id => {
 
-            _.each(ids, id => {
-
-                ds.dm.createEntity(this.get_detail_table(), {
-                    id: utils.guid(),
-                    usrid: _.result(this.props.emp, 'usrid'),
-                    [this.get_detail_field()]: id
-                });
-
+            ds.dm.createEntity(this.get_detail_table(), {
+                [utils.key]: utils.guid(),
+                usrid: _.result(this.props.emp, 'usrid'),
+                [this.get_detail_field()]: id
             });
+        });
 
 
-            ds.saveChanges().then(() => {
+        ds.saveChanges().then(() => {
 
-                toastr.success('Data successfully saved');
+            toastr.success('Data successfully saved');
 
-                (this.refs['listing'] as DataListing).reload();
+            (this.refs['listing'] as DataListing).reload();
 
-                d.resolve(true);
+            d.resolve(true);
 
-            }).fail(err => {
+        }).fail(err => {
 
-                toastr.error(JSON.stringify(err));
+            toastr.error(JSON.stringify(err));
 
-                d.reject(err);
-
-            }).finally(() => {
-
-                utils.unspin(this.root);
-            });
-
+            d.reject(err);
 
         }).finally(() => {
 
             utils.unspin(this.root);
         });
-
+        
+        
         return d.promise;
     }
 }
@@ -282,9 +283,7 @@ export class DataListing extends jx.forms.ui.XDataList {
 
         var d = Q.defer();
 
-        var __where = {
-            id: _.result(this.props.emp,'usrid')
-        }
+        this.ds.dm.clear();
 
         this.ds.fetch_data({
             condition: "usrid='{0}'".format(_.result(this.props.emp, 'usrid'))
@@ -321,6 +320,7 @@ export class DataListing extends jx.forms.ui.XDataList {
                 var lookup = ds.findkey(cellData);
 
                 $(cell).empty();
+
                 $(cell).append($('<p class="tr-fontsize-15" >{0}</p>'.format(_.result(lookup, this.props.lookup_field))));
 
             });
@@ -348,10 +348,11 @@ export interface Datalist_FindProps extends jx.forms.ui.DataListProps {
     owner: EmpExplorer,
     usr: breeze.Entity,
     lookup_table: string,
-    lookup_field: string,    
+    lookup_field: string,
+    exclusions?: breeze.Entity[],
     exec_paging: (dt: Datalist_Find, req, draw, setts)=> any
 }
-export class Datalist_Find extends jx.forms.ui.DataList {
+export class Datalist_Find extends jx.forms.ui.XDataList {
 
     constructor(props: Datalist_FindProps) {
 
@@ -362,8 +363,7 @@ export class Datalist_Find extends jx.forms.ui.DataList {
 
 
         this.props.modal.save = () => {
-
-
+            
             if (!this.checks.length) {
                 return;
             }

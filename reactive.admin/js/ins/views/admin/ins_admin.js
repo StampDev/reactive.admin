@@ -168,4 +168,4 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/ins_master_page',
         return OCCP;
     }());
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/admin/ins_admin.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/admin/ins_admin.js.map

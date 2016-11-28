@@ -76,4 +76,4 @@ define(["require", "exports", 'react', '../../core/lib'], function (require, exp
     }(jx.views.ReactiveView));
     exports.InsPageNavBar = InsPageNavBar;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/lib/ins_page_menus.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/lib/ins_page_menus.js.map

@@ -170,4 +170,4 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', '../../..
     }(jx.views.ReactiveView));
     exports.ProfileDatalist = ProfileDatalist;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profiles_datalist.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profiles_datalist.js.map

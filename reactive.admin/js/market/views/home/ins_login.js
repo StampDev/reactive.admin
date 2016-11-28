@@ -22,4 +22,4 @@ define(["require", "exports", 'react', '../../../core/lib'], function (require, 
     }(jx.views.ReactView));
     exports.InsLoginPage = InsLoginPage;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/market/views/home/ins_login.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/market/views/home/ins_login.js.map

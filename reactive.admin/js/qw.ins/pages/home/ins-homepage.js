@@ -20,4 +20,4 @@ define(["require", "exports", 'react-bootstrap', '../../app/inspage'], function 
     }(ins.InsPage));
     exports.InsHomePage = InsHomePage;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.ins/pages/home/ins-homepage.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.ins/pages/home/ins-homepage.js.map

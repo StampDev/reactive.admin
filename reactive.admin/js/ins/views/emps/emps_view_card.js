@@ -98,4 +98,4 @@ define(["require", "exports", 'react', '../../../core/lib', '../../../core/ui', 
     }(ui.TypeView));
     exports.Text = Text;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/emps/emps_view_card.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/emps/emps_view_card.js.map

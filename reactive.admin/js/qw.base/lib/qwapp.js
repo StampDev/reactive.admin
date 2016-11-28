@@ -71,4 +71,4 @@ define(["require", "exports", 'react', 'react-dom', './qwlib'], function (requir
     }());
     exports.QwRouter = QwRouter;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwapp.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.base/lib/qwapp.js.map

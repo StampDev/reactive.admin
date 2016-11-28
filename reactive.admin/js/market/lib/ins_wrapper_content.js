@@ -34,4 +34,4 @@ define(["require", "exports", 'react', '../../core/lib'], function (require, exp
     }(jx.views.ReactView));
     exports.InsWrapperContent = InsWrapperContent;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/market/lib/ins_wrapper_content.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/market/lib/ins_wrapper_content.js.map

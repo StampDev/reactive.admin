@@ -21,4 +21,4 @@ define(["require", "exports", 'react', '../../lib/ins_master_page'], function (r
     }(ins_master_page_1.InsMasterPage));
     exports.InsAdminPage = InsAdminPage;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/market/views/admin/ins_admin.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/market/views/admin/ins_admin.js.map

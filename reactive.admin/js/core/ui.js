@@ -78,4 +78,4 @@ define(["require", "exports", 'react', 'react-bootstrap', './lib'], function (re
     }
     exports.get = get;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/core/ui.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/core/ui.js.map

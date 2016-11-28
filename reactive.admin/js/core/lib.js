@@ -548,18 +548,16 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
             ]).then(function () {
                 init_backendless();
                 // dummy call to initialize remote database
-                var ds = new data.DataSource('occp');
-                var qry = {
-                    take: 50
-                };
-                ds.fetch_data(qry)
-                    .then(function () {
-                    var metadata = ds.dm.metadataStore.exportMetadata();
-                    __app.metadata = metadata;
-                })
-                    .fail(function (err) {
-                    toastr.error('Database initialization failed: ' + JSON.stringify(err));
-                });
+                //var ds = new data.DataSource('occp');
+                //var qry = {
+                //    take: 50
+                //}
+                //ds.fetch_data(qry).then(() => {
+                //    var metadata = ds.dm.metadataStore.exportMetadata()
+                //    __app.metadata = metadata;
+                //}).fail(err => {
+                //    toastr.error('Database initialization failed: ' + JSON.stringify(err));
+                //});
                 load_application().finally(function () {
                     __app.start_routing();
                 });
@@ -1937,9 +1935,7 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
         var DataSource = (function () {
             function DataSource(model) {
                 this.model = model;
-                if (__app && __app.metadata) {
-                    this.dm.metadataStore.importMetadata(__app.metadata);
-                }
+                this.dm.metadataStore.importMetadata(datastore.store.exportMetadata());
             }
             DataSource.prototype.exec_query = function (query) {
                 return this.fetch_data(query);
@@ -2133,7 +2129,7 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                     if (!this.__dm) {
                         this.__dm = new breeze.EntityManager({
                             dataService: new breeze.DataService({
-                                serviceName: this.model,
+                                serviceName: "bx.{0}".format(this.model),
                             }),
                             validationOptions: new breeze.ValidationOptions({
                                 validateOnSave: false,
@@ -2149,13 +2145,13 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
             });
             DataSource.prototype.fetch_data = function (qry) {
                 var _this = this;
-                if (!datastore.Store.hasMetadataFor(this.model)) {
+                if (!datastore.store.hasMetadataFor(this.model)) {
                     return this.fetch_metadata().then(function (args) {
                         return _this.fetch_dataEx(qry);
                     });
                 }
                 else {
-                    this.dm.metadataStore.importMetadata(datastore.Store.exportMetadata());
+                    this.dm.metadataStore.importMetadata(datastore.store.exportMetadata());
                     return this.fetch_dataEx(qry);
                 }
             };
@@ -2234,7 +2230,7 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                 var d = Q.defer();
                 this.fetch_and_store_meta(this.model, null).then(function (type) {
                     datastore.create_entity_def(type);
-                    _this.dm.metadataStore.importMetadata(datastore.Store.exportMetadata());
+                    _this.dm.metadataStore.importMetadata(datastore.store.exportMetadata());
                     d.resolve(true);
                 }).fail(function (err) {
                     toastr.error(JSON.stringify(err));
@@ -2270,18 +2266,58 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                 }));
                 return d.promise;
             };
+            DataSource.prototype.save_one = function (obj) {
+                var d = Q.defer();
+                var type = this.dm.metadataStore.getEntityType(this.model);
+                var __obj = this.__unwrap([obj], type, true)[0];
+                switch (__obj.entityAspect.entityState.getName()) {
+                    case breeze.EntityState.Deleted.getName():
+                        {
+                            delete __obj['_$typeName'];
+                            delete __obj.entityAspect;
+                            delete __obj.entityType;
+                            Backendless.Persistence.of(this.model).remove(__obj, new Backendless.Async(function (succ) {
+                                d.resolve(obj);
+                            }, function (err) {
+                                d.reject(err);
+                            }));
+                        }
+                        break;
+                    default:
+                        {
+                            delete __obj['_$typeName'];
+                            delete __obj.entityAspect;
+                            delete __obj.entityType;
+                            Backendless.Persistence.of(this.model).save(__obj, new Backendless.Async(function (succ) {
+                                d.resolve(__obj);
+                            }, function (err) {
+                                d.reject(err);
+                            }));
+                        }
+                        break;
+                }
+                return d.promise;
+            };
             DataSource.prototype.saveChanges = function () {
                 var _this = this;
-                var tmp = new DataSource(this.model);
-                tmp.dm.importEntities(this.dm.exportEntities());
-                var _data = tmp.unwrap();
                 var d = Q.defer();
-                Backendless.Persistence.of(this.model).save(_data[0], new Backendless.Async(function (succ) {
+                var delta = _.filter(this.dm.getEntities(this.model), function (ent) {
+                    var modified = !ent.entityAspect.entityState.isUnchanged()
+                        && !ent.entityAspect.entityState.isDetached();
+                    return modified;
+                });
+                if (delta.length === 0) {
+                    return Q.resolve(true);
+                }
+                var fns = _.map(delta, function (d) {
+                    return _this.save_one(d);
+                });
+                Q.all(fns).then(function (rst) {
                     _this.dm['acceptChanges']();
                     d.resolve(true);
-                }, function (err) {
+                }).fail(function (err) {
                     d.reject(err);
-                }));
+                });
                 return d.promise;
             };
             DataSource.prototype.retrieve_added = function () {
@@ -2307,17 +2343,18 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                 var data = this.dm.getEntities(this.model);
                 var jsList = this.__unwrap(data, this.dm.metadataStore.getEntityType(this.model));
                 return jsList;
-                //return this.unwrap_type(this.dm.metadataStore.getEntityType(this.model) as any, data);
             };
-            DataSource.prototype.__unwrap = function (data, type) {
+            DataSource.prototype.__unwrap = function (data, type, skip_aspect) {
                 var _this = this;
                 var array = [];
                 _.each(data, function (obj) {
                     var __obj = ko['mapping'].toJS(obj);
                     __obj['___class'] = type.shortName;
-                    delete __obj._$typeName;
-                    delete __obj.entityAspect;
-                    delete __obj.entityType;
+                    if (!skip_aspect) {
+                        delete __obj._$typeName;
+                        delete __obj.entityAspect;
+                        delete __obj.entityType;
+                    }
                     if (obj.entityAspect.entityState.isAdded()) {
                         delete __obj.objectId;
                     }
@@ -2497,8 +2534,8 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                 store: store
             });
         }
-        datastore.Store = new breeze.MetadataStore({ namingConvention: camelCaseConvention });
-        addDataService(datastore.Store, 'DataStore');
+        datastore.store = new breeze.MetadataStore({ namingConvention: camelCaseConvention });
+        addDataService(datastore.store, 'DataStore');
         function add_to_Store(type) {
             _entities_cache.push(type);
             var _type = _.extend(type, {
@@ -2506,8 +2543,8 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                 shortName: type.defaultResourceName,
                 autoGeneratedKeyType: breeze.AutoGeneratedKeyType.None,
             });
-            addDataService(datastore.Store, type.shortName);
-            addTypeToStore(datastore.Store, _type);
+            addDataService(datastore.store, type.shortName);
+            addTypeToStore(datastore.store, _type);
         }
         datastore.add_to_Store = add_to_Store;
         function create_entity_def(source_def, master_src_def) {
@@ -2544,7 +2581,7 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                         associationName: 'association_{0}_{1}'.format(target_ent.defaultResourceName, rel),
                         isScalar: false
                     };
-                    if (!datastore.Store.getEntityType(target_ent.defaultResourceName, true)) {
+                    if (!datastore.store.getEntityType(target_ent.defaultResourceName, true)) {
                         add_to_Store(target_ent);
                     }
                     var rel_ent = source_def.relations[rel];
@@ -2558,4 +2595,4 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
         datastore.create_entity_def = create_entity_def;
     })(datastore = exports.datastore || (exports.datastore = {}));
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/core/lib.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/core/lib.js.map

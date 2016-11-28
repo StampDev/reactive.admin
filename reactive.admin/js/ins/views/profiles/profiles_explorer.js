@@ -80,4 +80,4 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/ins_master_page',
         return ProfileExploreActions;
     }(jx.views.ReactiveView));
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profiles_explorer.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profiles_explorer.js.map

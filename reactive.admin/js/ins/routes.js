@@ -30,4 +30,4 @@ define(["require", "exports"], function (require, exports) {
         },
     };
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/routes.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/routes.js.map

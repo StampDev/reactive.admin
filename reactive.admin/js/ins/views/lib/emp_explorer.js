@@ -16,7 +16,7 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         }
         Object.defineProperty(EmpExplorer.prototype, "usr", {
             get: function () {
-                return this.refs['listing'].usr;
+                return this.props.usr;
             },
             enumerable: true,
             configurable: true
@@ -52,14 +52,15 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
             var _this = this;
             var d = Q.defer();
             utils.spin(this.root);
-            var obj = _.find(this.usr[this.get_detail_table()](), function (d) {
+            var ds = new jx.bx.DataSource(this.get_detail_table());
+            ds.dm.importEntities(this.listing.ds.dm.exportEntities());
+            var __data = ds.dm.getEntities(this.get_detail_table());
+            var obj = _.find(__data, function (d) {
                 return _.result(d, _this.get_detail_field()) === id;
             });
             if (obj) {
                 obj.entityAspect.setDeleted();
             }
-            var ds = new jx.data.DataSource('usr');
-            ds.dm.importEntities(this.usr.entityAspect.entityManager.exportEntities());
             ds.saveChanges().then(function () {
                 toastr.success('Data saved successfully');
                 d.resolve(true);
@@ -77,8 +78,8 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
                 bsSize: 'lg',
                 title: this.get_select_title(),
                 content: function (modal) {
-                    var exclusion = _this.usr[_this.get_detail_table()]();
-                    return React.createElement(Datalist_Find, {owner: _this, modal: modal, ref: 'dt_find', scroll_height: 680, usr: _this.usr, lookup_table: _this.get_lookup_table(), lookup_field: _this.get_lookup_field(), exec_paging: _this.get_exec_paging, row_count: true});
+                    var exclusions = _this.listing.ds.dm.getEntities(_this.get_detail_table());
+                    return React.createElement(Datalist_Find, {owner: _this, modal: modal, ref: 'dt_find', scroll_height: 680, usr: _this.usr, exclusions: exclusions, lookup_table: _this.get_lookup_table(), lookup_field: _this.get_lookup_field(), exec_paging: _this.get_exec_paging, row_count: true});
                 }
             });
         };
@@ -106,34 +107,24 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         EmpExplorer.prototype.store_selection = function (ids) {
             var _this = this;
             var d = Q.defer();
-            var ds = new jx.data.DataSource('usr');
+            var ds = new jx.bx.DataSource(this.get_detail_table());
             utils.spin(this.root);
-            ds.exec_query({
-                where: {
-                    id: _.result(this.props.emp, 'usrid')
-                },
-                expand: [this.get_detail_table()]
-            }).then(function () {
-                _.each(ids, function (id) {
-                    ds.dm.createEntity(_this.get_detail_table(), (_a = {
-                            id: utils.guid(),
-                            usrid: _.result(_this.props.emp, 'usrid')
-                        },
-                        _a[_this.get_detail_field()] = id,
-                        _a
-                    ));
-                    var _a;
-                });
-                ds.saveChanges().then(function () {
-                    toastr.success('Data successfully saved');
-                    _this.refs['listing'].reload();
-                    d.resolve(true);
-                }).fail(function (err) {
-                    toastr.error(JSON.stringify(err));
-                    d.reject(err);
-                }).finally(function () {
-                    utils.unspin(_this.root);
-                });
+            _.each(ids, function (id) {
+                ds.dm.createEntity(_this.get_detail_table(), (_a = {},
+                    _a[utils.key] = utils.guid(),
+                    _a.usrid = _.result(_this.props.emp, 'usrid'),
+                    _a[_this.get_detail_field()] = id,
+                    _a
+                ));
+                var _a;
+            });
+            ds.saveChanges().then(function () {
+                toastr.success('Data successfully saved');
+                _this.refs['listing'].reload();
+                d.resolve(true);
+            }).fail(function (err) {
+                toastr.error(JSON.stringify(err));
+                d.reject(err);
             }).finally(function () {
                 utils.unspin(_this.root);
             });
@@ -179,9 +170,7 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         DataListing.prototype.load_data = function () {
             var _this = this;
             var d = Q.defer();
-            var __where = {
-                id: _.result(this.props.emp, 'usrid')
-            };
+            this.ds.dm.clear();
             this.ds.fetch_data({
                 condition: "usrid='{0}'".format(_.result(this.props.emp, 'usrid'))
             }).then(function () {
@@ -363,7 +352,7 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
             this.root.find('.select-mode').addClass('hidden');
         };
         return Datalist_Find;
-    }(jx.forms.ui.DataList));
+    }(jx.forms.ui.XDataList));
     exports.Datalist_Find = Datalist_Find;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/lib/emp_explorer.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/lib/emp_explorer.js.map

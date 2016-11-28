@@ -286,4 +286,4 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', '../../..
     }(jx.forms.ui.DataList));
     exports.LightExplorerDatalist_View = LightExplorerDatalist_View;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/lib/lightexplorer.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/lib/lightexplorer.js.map

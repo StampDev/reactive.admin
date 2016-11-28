@@ -149,4 +149,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../../core/lib', '
         return ProfileHeaderInfo;
     }(jx.views.ReactiveView));
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_view.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_view.js.map

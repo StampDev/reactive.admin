@@ -23,4 +23,4 @@ define(["require", "exports", 'react', '../../core/lib'], function (require, exp
     }(jx.views.ReactView));
     exports.InsPageSubNavBar = InsPageSubNavBar;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/lib/ins_page_subnavbar.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/lib/ins_page_subnavbar.js.map

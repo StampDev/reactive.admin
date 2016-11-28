@@ -818,11 +818,9 @@ export module system {
     export function load_config() {
 
         var d = Q.defer();
-
-
+        
         var __config_path: string = __instance_dir + '/config';
-
-
+        
         require([__config_path], obj => {
 
             __settings = obj.config;
@@ -830,6 +828,8 @@ export module system {
             d.resolve(__settings);
 
         });
+
+
         return d.promise;
     }
 
@@ -893,23 +893,21 @@ export module system {
             init_backendless();
             
             // dummy call to initialize remote database
-            var ds = new data.DataSource('occp');
+            //var ds = new data.DataSource('occp');
 
-            var qry = {
-                take: 50
-            }
+            //var qry = {
+            //    take: 50
+            //}
 
-            ds.fetch_data(qry)
-                .then(() => {
+            //ds.fetch_data(qry).then(() => {
 
-                    var metadata = ds.dm.metadataStore.exportMetadata()
+            //    var metadata = ds.dm.metadataStore.exportMetadata()
 
-                    __app.metadata = metadata;
+            //    __app.metadata = metadata;
 
-                })
-                .fail(err => {
-                    toastr.error('Database initialization failed: ' + JSON.stringify(err));
-                });
+            //}).fail(err => {
+            //    toastr.error('Database initialization failed: ' + JSON.stringify(err));
+            //});
             
             load_application().finally(() => {
 
@@ -3308,9 +3306,7 @@ export module data {
 
             this.model = model;
 
-            if (__app && __app.metadata) {
-                this.dm.metadataStore.importMetadata(__app.metadata);
-            }
+            this.dm.metadataStore.importMetadata(datastore.store.exportMetadata());
         }
 
 
@@ -3581,7 +3577,7 @@ export module bx {
             if (!this.__dm) {
                 this.__dm = new breeze.EntityManager({
                     dataService: new breeze.DataService({
-                        serviceName: this.model,
+                        serviceName: "bx.{0}".format(this.model),
                     }),
                     validationOptions: new breeze.ValidationOptions({
                         validateOnSave: false,
@@ -3593,12 +3589,11 @@ export module bx {
             }
             return this.__dm;
         }
-
         
 
         fetch_data(qry?: Backendless.DataQueryValueI): Q.Promise<breeze.Entity[]> {
             
-            if (!datastore.Store.hasMetadataFor(this.model)) {
+            if (!datastore.store.hasMetadataFor(this.model)) {
 
                 return this.fetch_metadata().then(args => {
 
@@ -3607,7 +3602,7 @@ export module bx {
 
             } else {
                 
-                this.dm.metadataStore.importMetadata(datastore.Store.exportMetadata());
+                this.dm.metadataStore.importMetadata(datastore.store.exportMetadata());
 
                 return this.fetch_dataEx(qry);
             }
@@ -3738,7 +3733,7 @@ export module bx {
 
                 datastore.create_entity_def(type);
 
-                this.dm.metadataStore.importMetadata(datastore.Store.exportMetadata());
+                this.dm.metadataStore.importMetadata(datastore.store.exportMetadata());
 
                 d.resolve(true);
 
@@ -3808,27 +3803,90 @@ export module bx {
         }
 
 
-        saveChanges() {
-            
-            var tmp = new DataSource(this.model);
-
-            tmp.dm.importEntities(this.dm.exportEntities());
-
-            var _data = tmp.unwrap();
+        private save_one(obj: any) {
 
             var d = Q.defer();
 
-            Backendless.Persistence.of(this.model).save(_data[0], new Backendless.Async(succ => {
+            var type = this.dm.metadataStore.getEntityType(this.model) as any;
+            
+            var __obj = this.__unwrap([obj], type, true)[0];
+
+            switch (__obj.entityAspect.entityState.getName()) {
+
+                case breeze.EntityState.Deleted.getName(): {
+
+                    delete __obj['_$typeName'];
+                    delete __obj.entityAspect;
+                    delete __obj.entityType;
+
+                    Backendless.Persistence.of(this.model).remove(__obj, new Backendless.Async(succ => {
+
+                        d.resolve(obj);
+
+                    }, err => {
+
+                        d.reject(err);
+
+                    }));
+
+                } break;
+
+                default: {
+
+                    delete __obj['_$typeName'];
+                    delete __obj.entityAspect;
+                    delete __obj.entityType;
+
+                    Backendless.Persistence.of(this.model).save(__obj, new Backendless.Async(succ => {
+
+                        d.resolve(__obj);
+
+                    }, err => {
+
+                        d.reject(err);
+
+                    }));
+
+                } break;
+
+            }
+            
+
+            return d.promise;
+        }
+
+
+        saveChanges(): Q.Promise<any> {
+
+            var d = Q.defer();
+            
+            var delta = _.filter(this.dm.getEntities(this.model), (ent: breeze.Entity) => {
+                
+                var modified = !ent.entityAspect.entityState.isUnchanged()
+                    && !ent.entityAspect.entityState.isDetached();
+
+                return modified;
+            });
+
+            if (delta.length === 0) {
+                return Q.resolve(true);
+            }
+            
+            var fns: any[] = _.map(delta, d => {
+                return this.save_one(d);
+            });
+
+            Q.all(fns).then((rst: any[]) => {
 
                 this.dm['acceptChanges']();
 
                 d.resolve(true);
 
-            }, err => {
+            }).fail(err => {
 
                 d.reject(err);
 
-            }));
+            });
 
 
             return d.promise;
@@ -3873,12 +3931,11 @@ export module bx {
             var jsList:any = this.__unwrap(data, this.dm.metadataStore.getEntityType(this.model) as any);
 
             return jsList;
-
-            //return this.unwrap_type(this.dm.metadataStore.getEntityType(this.model) as any, data);
+            
         }
 
 
-        private __unwrap(data: breeze.Entity[], type: breeze.EntityType) {
+        private __unwrap(data: breeze.Entity[], type: breeze.EntityType, skip_aspect?: boolean): breeze.Entity[] {
 
             var array: any[] = [];
 
@@ -3888,10 +3945,12 @@ export module bx {
 
                 __obj['___class'] = type.shortName;
 
-                delete __obj._$typeName;
-                delete __obj.entityAspect;
-                delete __obj.entityType;
-
+                if (!skip_aspect) {
+                    delete __obj._$typeName;
+                    delete __obj.entityAspect;
+                    delete __obj.entityType;
+                }
+                
                 if (obj.entityAspect.entityState.isAdded()) {
                     delete __obj.objectId;
                 }
@@ -3927,7 +3986,7 @@ export module bx {
             return array;
 
         }
-
+        
 
         private unwrap_type(type: breeze.EntityType, data: breeze.Entity[]) {
 
@@ -4253,10 +4312,10 @@ export module datastore {
     }
 
 
-    export var Store: breeze.MetadataStore = new breeze.MetadataStore({ namingConvention: camelCaseConvention });
+    export var store: breeze.MetadataStore = new breeze.MetadataStore({ namingConvention: camelCaseConvention });
 
 
-    addDataService(Store, 'DataStore');
+    addDataService(store, 'DataStore');
 
 
     export function add_to_Store(type: EntityTypeDefinition) {
@@ -4269,9 +4328,9 @@ export module datastore {
             autoGeneratedKeyType: breeze.AutoGeneratedKeyType.None,
         });
 
-        addDataService(Store, type.shortName);
+        addDataService(store, type.shortName);
 
-        addTypeToStore(Store, _type);
+        addTypeToStore(store, _type);
     }
 
 
@@ -4322,7 +4381,7 @@ export module datastore {
                     isScalar: false
                 }
 
-                if (!Store.getEntityType(target_ent.defaultResourceName, true)) {
+                if (!store.getEntityType(target_ent.defaultResourceName, true)) {
                     add_to_Store(target_ent);
                 }
                 

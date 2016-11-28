@@ -6,4 +6,4 @@ define(["require", "exports", './lib'], function (require, exports, jx) {
     "use strict";
     jx.system.start();
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/core/main.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/core/main.js.map

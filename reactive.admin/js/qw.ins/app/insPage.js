@@ -36,4 +36,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../qw.base/lib/qwp
     }(p.QwPage));
     exports.InsPage = InsPage;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/qw.ins/app/inspage.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.ins/app/inspage.js.map

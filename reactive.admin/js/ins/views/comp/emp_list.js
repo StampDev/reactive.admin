@@ -224,4 +224,4 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
         return RowDeptInfo;
     }(jx.views.ReactiveView));
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_list.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/emp_list.js.map

@@ -29,4 +29,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../../core/ui'], f
     }(ui.TypeView));
     exports.Text = Text;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/lib/ins.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/lib/ins.js.map

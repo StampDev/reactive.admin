@@ -136,4 +136,4 @@ define(["require", "exports", 'react', 'react-bootstrap', './emps_view_card', '.
     }(ui.TypeView));
     exports.Text = Text;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/emps/emps_view.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/emps/emps_view.js.map

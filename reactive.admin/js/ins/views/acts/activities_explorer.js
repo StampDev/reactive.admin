@@ -192,4 +192,4 @@ define(["require", "exports", 'react', '../../../core/lib', '../lib/lightexplore
     }(li.LightExplorerDatalist_View));
     exports.ProfileActivsDatalist = ProfileActivsDatalist;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/acts/activities_explorer.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/acts/activities_explorer.js.map

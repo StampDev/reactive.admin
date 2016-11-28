@@ -260,4 +260,4 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
         return RegisterEmp;
     }(jx.views.ReactiveView));
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/comp/new_emp.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/comp/new_emp.js.map

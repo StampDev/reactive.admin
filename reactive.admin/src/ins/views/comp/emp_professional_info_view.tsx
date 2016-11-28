@@ -63,7 +63,7 @@ export class EmpProfessionalInfo extends jx.views.ReactiveView {
 
                                     <br />
 
-                                    <EmpActsExplorer owner={this} emp={this.props.emp}/>
+                                    <EmpActsExplorer owner={this} emp={this.props.emp} usr={this.props.usr}/>
 
                                 </b.Tab>
 
@@ -185,7 +185,7 @@ class EmpActsExplorer extends EmpExplorer {
 
         var _not_in = undefined;
 
-        var exclude_ids: any[] = _.map(dt.props.usr['usra'](), a => _.result(a, 'actid'));
+        var exclude_ids: any[] = _.map(dt.props.exclusions, a => _.result(a, 'actid'));
 
         if (exclude_ids && exclude_ids.length > 0) {
 

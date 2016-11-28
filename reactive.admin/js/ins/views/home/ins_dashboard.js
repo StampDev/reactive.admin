@@ -23,4 +23,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../../core/lib'], 
     }(core.views.ReactiveView));
     exports.InsDashboard = InsDashboard;
 });
-//# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/ins/views/home/ins_dashboard.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/home/ins_dashboard.js.map
