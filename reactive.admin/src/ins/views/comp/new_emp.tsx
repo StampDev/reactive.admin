@@ -125,6 +125,8 @@ export class NewEmployeeView extends jx.views.ReactiveView {
 
         Backendless.UserService.register(user, new Backendless.Async(rst => {
 
+
+
             var qry = new Backendless.DataQuery();
             qry.condition = "email='{0}'".format(args.usremail);
 
