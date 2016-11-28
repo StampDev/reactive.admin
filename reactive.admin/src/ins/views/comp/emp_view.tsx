@@ -29,10 +29,17 @@ export class EmpView extends InsMasterPage {
     }
 }
 
-class EmpViewForm extends jx.views.ReactiveEditDataView {
+interface EmpViewFormState extends jx.views.ReactiveViewState {
+    emp: any,
+    usr: any
+}
+class EmpViewForm extends jx.views.ReactiveView {
+
+    state: EmpViewFormState;
 
     constructor(props: any) {
-        super(props);        
+        super(props);
+        this.state.loading = true;
     }
 
 
@@ -43,16 +50,24 @@ class EmpViewForm extends jx.views.ReactiveEditDataView {
 
     load_data(qry?: jx.data.DataQuery) {
         
-        var __id = jx.url.get_param('empid');
+        var id = jx.url.get_param('empid');
+
+        return bx.fetchKey('emp', id).then(emp => {
+
+            return bx.fetchKey(Backendless.User, _.result(emp, 'usrid'))
+                .then(usr => {
+
+                    this.state.emp = emp;
+                    this.state.usr = usr;
+
+                    return emp;
+
+                });
+
+            
+
+        });
         
-        var __qry: jx.data.DataQuery = {
-            where: {
-                id: __id
-            },
-            expand:['jbr']  
-        }
-        
-        return this.ds.exec_query(__qry)
     }
 
 
@@ -64,7 +79,7 @@ class EmpViewForm extends jx.views.ReactiveEditDataView {
             return <i className="fa fa-spin fa-spinner fa-2x"></i>
         }
 
-        var emp = this.ds.findkey(jx.url.get_param('empid'));
+        var emp = this.state.emp;
         
 
         var html =
@@ -79,11 +94,11 @@ class EmpViewForm extends jx.views.ReactiveEditDataView {
 
                                 <b.Col lg={5}>
 
-                                    <EmpsHeaderInfo owner={this} emp={emp} start_by_loading={true} />
+                                    <EmpsHeaderInfo owner={this} emp={emp} usr={this.state.usr} />
 
                                     <hr />
 
-                                    <EmpPersonalInfo owner={this} id={_.result(emp, 'usrid') } start_by_loading={true} />
+                                    <EmpPersonalInfo owner={this} usr={this.state.usr } />
 
                                     <hr />
 
@@ -93,7 +108,10 @@ class EmpViewForm extends jx.views.ReactiveEditDataView {
 
                                 <b.Col lg={7}>
 
+                                    {/*
                                     <EmpProfessionalInfo emp={emp} />
+                                    */}
+
 
                                 </b.Col>
                                 

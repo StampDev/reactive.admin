@@ -17,7 +17,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
         CompDeptBreadCrumView.prototype.render = function () {
             var _this = this;
             if (this.state.loading) {
-                return null;
+                return React.createElement("i", {className: "fa fa-spin fa-spinner fa-2x"});
             }
             var data = this.state.items;
             var target = _.find(data, function (d) {

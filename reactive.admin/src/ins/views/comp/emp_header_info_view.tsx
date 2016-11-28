@@ -12,17 +12,29 @@ import ui = require('../../../core/ui');
 
 
 export interface EmpsHeaderInfoProps extends ui.BtProps {
-    emp: breeze.Entity
+    emp: breeze.Entity,
+    usr: any
 }
-export class EmpsHeaderInfo extends ui.TypeView<EmpsHeaderInfoProps, ui.BtState>{
+interface EmpsHeaderInfoState extends ui.BtState {
+    usr: any
+}
+export class EmpsHeaderInfo extends ui.TypeView<EmpsHeaderInfoProps, EmpsHeaderInfoState>{
+
+    constructor(props: EmpsHeaderInfoProps) {
+        super(props);
+        this.state.usr = props.usr;
+    }
 
     render() {
+        
+        var name = _.result(this.state.usr, 'name');
+        var surname = _.result(this.state.usr, 'surname');
 
-        if (this.state.loading) {
-            return <i className="fa fa-spin fa-spinner"></i>;
+        if (!surname) {
+            surname = '';
         }
 
-        var usr_name = '{0} {1}'.format(_.result(this.usr, 'usrname'), _.result(this.usr, 'usrsurname'));
+        var usr_name = '{0} {1}'.format(name, surname);
 
 
         var html =
@@ -82,56 +94,22 @@ export class EmpsHeaderInfo extends ui.TypeView<EmpsHeaderInfoProps, ui.BtState>
 
     }
 
-    get usr(): breeze.Entity {
-        return this.ds.findkey(_.result(this.props.emp, 'usrid'));
-    }
 
     ds: jx.data.DataSource;
 
     on_notify() {
 
         switch (this.current_event.action) {
-
-            case jx.constants.events.view_initialized: {
-
-                if (this.state.loading) {
-
-                    this.ds = new jx.data.DataSource('usr');
-
-                    this.ds.exec_query({
-                        where: { id: _.result(this.props.emp, 'usrid') }
-                    }).then(() => {
-
-                        this.newState({
-                            loading: false
-                        });
-
-                    });
-                }
-
-            } break;
-
-
+            
             case 'update-user': {
 
                 this.newState({
                     reload: true
                 }, () => {
 
-                    utils.spin(this.root);
-
-                    this.ds.dm.clear();
-                    this.ds.exec_query({
-                        where: { id: _.result(this.current_event.data, 'id') }
-                    }).then(() => {
-
-                        this.newState({
-                            reload: false
-                        }, () => {
-
-                            utils.unspin(this.root);
-                        });
-
+                    this.setState({
+                        reload: false,
+                        usr: this.current_event.data
                     });
 
                 })

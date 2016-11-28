@@ -8,38 +8,32 @@ import jx = require('../../../core/lib');
 import rb = require('react-bootstrap');
 var b: any = rb;
 
-export interface EmpPersonalInfoProps extends jx.views.ReactiveEditDataViewProps {    
+export interface EmpPersonalInfoProps extends jx.views.ReactiveViewProps {
+    usr: any
 }
-interface EmpPersonalInfoState extends jx.views.ReactiveEditDataViewState {
+interface EmpPersonalInfoState extends jx.views.ReactiveViewState {
+    usr: any,
     datamode?: DataMode
 }
-export class EmpPersonalInfo extends jx.views.ReactiveEditDataView {
+export class EmpPersonalInfo extends jx.views.ReactiveView {
 
-
+    bound: any;
     state: EmpPersonalInfoState;
     props: EmpPersonalInfoProps;
 
     constructor(props: EmpPersonalInfoProps) {
         super(props);
         this.state.datamode = DataMode.view;
+        this.state.usr = props.usr;
     }
 
-
-    get_model(): string {
-        return 'usr';
-    }
     
-
     render() {
-
-        if (this.state.loading) {
-            return <i className="fa fa-spin fa-spinner"></i>
-        }
-
-        var viewform = <EmpViewForm owner={this} usr={this.item} />;
+        
+        var viewform = <EmpViewForm owner={this} usr={this.state.usr} />;
 
         if (this.state.datamode === DataMode.edit) {
-            viewform = <EmpViewFormEdit owner={this} usr={this.item} />;
+            viewform = <EmpViewFormEdit owner={this} usr={this.state.usr} />;
         }
 
 
@@ -89,63 +83,53 @@ export class EmpPersonalInfo extends jx.views.ReactiveEditDataView {
 
     save(e: Event) {   
 
-        if (!this.ds.dm.hasChanges()) {
-            this.toggle_edit(e);
+        if (!this.root.find('form').valid()) {
             return;
         }
 
         utils.spin(this.root);
         
-        var fields = this.item.entityAspect.originalValues;
+        bx.fetchKey(Backendless.User, _.result(this.state.usr, utils.key))
+            .then(usr => {
 
-        var update = _.filter(Object.keys(fields), f => {
-            return f === "usrname" || f === "usrsurname"
-        }).length > 0;
+                var unbound = ko['mapping'].toJS(this.bound);
 
-        this.save_data().then(() => {
+                var __usr = _.extend(usr, unbound);
 
-            toastr.success('Data saved successfully');
+                Backendless.UserService.update(__usr, new Backendless.Async(rst => {
 
-            this.toggle_edit(e);
+                    this.state.usr = __usr;
 
-            if (update) {
-                this.broadcast({
-                    action: 'update-user',
-                    data: this.item
-                });
-            }
+                    this.broadcast({
+                        action: 'update-user',
+                        data: __usr
+                    });
 
-        }).finally(() => {
+                    this.toggle_edit();
+
+                }, err => {
+
+                    toastr.error(JSON.stringify(err));
+
+                }))
+
+            })        
+        .finally(() => {
 
             utils.unspin(this.root);
         });
     }
 
 
-    cancel(e: Event) {
+    cancel(e?: Event) {
 
-        this.cancel_data();
+        //this.cancel_data();
 
         this.toggle_edit(e);
     }
+    
 
-
-    on_notify() {
-
-        switch (this.current_event.action) {
-
-            case jx.constants.events.view_data_loaded: {
-                
-            } break;
-                
-
-        }
-
-        return super.on_notify();
-    }
-
-
-    toggle_edit(e: Event) {
+    toggle_edit(e?: Event) {
 
         if (e) {
             e.preventDefault();
@@ -158,12 +142,37 @@ export class EmpPersonalInfo extends jx.views.ReactiveEditDataView {
         }, () => {
 
             if (this.state.datamode === DataMode.edit) {
-                ko.applyBindings(this.item, this.root.find('.edit-form')[0]);
+
+                this.bind_controls();
             }
 
         })
         
         return false;
+    }
+
+
+    bind_controls() {
+
+        this.bound = ko['mapping'].fromJS(this.state.usr);
+
+        ko.applyBindings(this.bound, this.root.find('.edit-form')[0]);
+
+        var options = {
+            rules: {
+                email: {                    
+                    email: true
+                }
+            },
+            errorPlacement: (err, el) => {
+                $(el).closest('.txt-root').find('.error-place').empty();
+                $(el).closest('.txt-root').find('.error-place').append(err);
+            }
+        };
+
+        this.root.find('form').validate(options);
+
+        this.root.find('form .control-label').css('float', 'left');//.removeClass('col-sm-4').addClass('col-sm-2');
     }
     
 }
@@ -199,8 +208,8 @@ class EmpViewForm extends jx.views.ReactiveView {
             <div className="row emp-viewform" style={{ fontSize:15 }}>
                 <div className="col-lg-9">
                     <dl className="dl-horizontal">
-                        <dt>User name: </dt> <dd>{"{0} {1}".format(_.result(this.item, 'usrname'), _.result(this.item, 'usrsurname')) }</dd>
-                        <dt>Email: </dt> <dd>{_.result(this.item, 'usremail') }</dd>                        
+                        <dt>User name: </dt> <dd>{"{0} {1}".format(_.result(this.item, 'name'), _.result(this.item, 'surname')) }</dd>
+                        <dt>Email: </dt> <dd>{_.result(this.item, 'email') }</dd>
                         <br />
                         <dt><i className="fa fa-linkedin-square m-r-xs"></i></dt> <dd><a href="#"> Linkedin url</a> </dd>
                         <dt><i className="fa fa-google-plus-square m-r-xs"></i></dt> <dd><a href="#"> Google+ url</a> </dd>
@@ -228,37 +237,38 @@ class EmpViewFormEdit extends EmpViewForm {
 
         var html =
             <b.Form horizontal className="edit-form">
-                <b.Col lg={6} className="">
 
-                    <dl className="dl-horizontal">
-                        <dt style={{ textAlign: 'left', marginLeft: 60, width: 70 }}>Status: </dt>
-                        <dd style={{ marginLeft: 0 }} ><span className="label label-primary">Active</span></dd>
-                    </dl>
+                <dl className="dl-horizontal hidden">
+                    <dt style={{ textAlign: 'left', marginLeft: 60, width: 70 }}>Status: </dt>
+                    <dd style={{ marginLeft: 0 }} ><span className="label label-primary">Active</span></dd>
+                </dl>
 
+                <b.Col lg={12} className="">
+                    
                     <TextInput
                         owner={this}
                         title="Name" datamode={DataMode.edit}
-                        icon="fa-user" property="usrname"
+                        icon="fa-user" property="name" required={true}
                         type="text" placeholder="User name"/>
 
 
                     <TextInput
                         owner={this}
                         title="Surname" datamode={DataMode.edit}
-                        icon="fa-user" property="usrsurname"
+                        icon="fa-user" property="surname" required={true}
                         type="text" placeholder="User surname"/>
 
 
                     <TextInput
                         owner={this}  datamode={DataMode.edit}
-                        title="Email" property="usremail"
-                        icon="fa-envelope"
+                        title="Email" property="email"
+                        icon="fa-envelope" required={true}
                         type="email" placeholder="Email"/>
 
                 </b.Col>
 
 
-                <b.Col lg={6} className="" style={{ marginTop: 40 }}>
+                <b.Col lg={12} className="" style={{ marginTop: 40 }}>
 
                     <SocialLink owner={this}  datamode={DataMode.edit}
                         title="Linkedin" property="usrlinkedin"
@@ -294,7 +304,8 @@ interface TextInputProps extends jx.views.ReactiveViewProps {
     type: string,
     property: string,
     datamode?: DataMode,
-    placeholder?: string
+    placeholder?: string,
+    required?: boolean
 }
 interface TextInputState extends jx.views.ReactiveViewState {
     datamode?: DataMode
@@ -321,13 +332,13 @@ class TextInput extends jx.views.ReactiveView {
         var edit_visible = this.state.datamode === DataMode.edit ? '' : 'hidden';
 
         var html =
-            <b.FormGroup controlId="formHorizontalEmail">
+            <b.FormGroup controlId="formHorizontalEmail" className="txt-root">
 
-                <b.Col componentClass={b.ControlLabel} sm={4}>
+                <b.Col componentClass={b.ControlLabel} sm={2}>
                     {"{0}:".format(this.props.title)}
                 </b.Col>
 
-                <b.Col sm={8}>
+                <b.Col sm={10}>
 
                     <p className={"view-mode {0}".format(view_visible) }  style={{ marginTop: 6, marginBottom: 10, fontSize: 15, fontWeight: 300 }}>
                         <i className={"fa {0} m-r-xs".format(this.props.icon) }></i>
@@ -338,9 +349,9 @@ class TextInput extends jx.views.ReactiveView {
                         <span className="input-group-addon">
                             <i className={"fa {0} m-r-xs".format(this.props.icon) }></i>
                         </span>
-                        <input type={this.props.type} placeholder={this.props.placeholder} className="form-control" data-bind={"textInput:{0}".format(this.props.property) } />
+                        <input type={this.props.type} placeholder={this.props.placeholder} name={this.props.property} className="form-control" required={this.props.required} data-bind={"textInput:{0}".format(this.props.property) } />
                     </div>
-
+                    <span className="error-place"></span>
                 </b.Col>
 
             </b.FormGroup>

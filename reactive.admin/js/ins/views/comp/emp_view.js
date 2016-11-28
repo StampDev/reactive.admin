@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '../../lib/ins_master_page', './emp_personal_info_view', './emp_header_info_view', './emp_professional_info_view', '../comp/emp_edu_view'], function (require, exports, React, jx, rb, ins_master_page_1, emp_personal_info_view_1, emp_header_info_view_1, emp_professional_info_view_1, edu) {
+define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '../../lib/ins_master_page', './emp_personal_info_view', './emp_header_info_view', '../comp/emp_edu_view'], function (require, exports, React, jx, rb, ins_master_page_1, emp_personal_info_view_1, emp_header_info_view_1, edu) {
     "use strict";
     var b = rb;
     var EmpView = (function (_super) {
@@ -29,27 +29,30 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
         __extends(EmpViewForm, _super);
         function EmpViewForm(props) {
             _super.call(this, props);
+            this.state.loading = true;
         }
         EmpViewForm.prototype.get_model = function () {
             return 'emp';
         };
         EmpViewForm.prototype.load_data = function (qry) {
-            var __id = jx.url.get_param('empid');
-            var __qry = {
-                where: {
-                    id: __id
-                },
-                expand: ['jbr']
-            };
-            return this.ds.exec_query(__qry);
+            var _this = this;
+            var id = jx.url.get_param('empid');
+            return bx.fetchKey('emp', id).then(function (emp) {
+                return bx.fetchKey(Backendless.User, _.result(emp, 'usrid'))
+                    .then(function (usr) {
+                    _this.state.emp = emp;
+                    _this.state.usr = usr;
+                    return emp;
+                });
+            });
         };
         EmpViewForm.prototype.render = function () {
             var profInfo = null;
             if (this.state.loading) {
                 return React.createElement("i", {className: "fa fa-spin fa-spinner fa-2x"});
             }
-            var emp = this.ds.findkey(jx.url.get_param('empid'));
-            var html = React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12, className: "animated fadeInRight", style: { paddingLeft: 20, paddingRight: 20 }}, React.createElement(jx.views.IBox, null, React.createElement("div", {style: { minHeight: 700 }}, React.createElement(b.Row, null, React.createElement(b.Col, {lg: 5}, React.createElement(emp_header_info_view_1.EmpsHeaderInfo, {owner: this, emp: emp, start_by_loading: true}), React.createElement("hr", null), React.createElement(emp_personal_info_view_1.EmpPersonalInfo, {owner: this, id: _.result(emp, 'usrid'), start_by_loading: true}), React.createElement("hr", null), React.createElement(edu.EmpEduView, {owner: this, emp: emp})), React.createElement(b.Col, {lg: 7}, React.createElement(emp_professional_info_view_1.EmpProfessionalInfo, {emp: emp})))))));
+            var emp = this.state.emp;
+            var html = React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12, className: "animated fadeInRight", style: { paddingLeft: 20, paddingRight: 20 }}, React.createElement(jx.views.IBox, null, React.createElement("div", {style: { minHeight: 700 }}, React.createElement(b.Row, null, React.createElement(b.Col, {lg: 5}, React.createElement(emp_header_info_view_1.EmpsHeaderInfo, {owner: this, emp: emp, usr: this.state.usr}), React.createElement("hr", null), React.createElement(emp_personal_info_view_1.EmpPersonalInfo, {owner: this, usr: this.state.usr}), React.createElement("hr", null), React.createElement(edu.EmpEduView, {owner: this, emp: emp})), React.createElement(b.Col, {lg: 7}))))));
             return html;
         };
         EmpViewForm.prototype.on_notify = function () {
@@ -78,7 +81,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
             return _super.prototype.on_notify.call(this);
         };
         return EmpViewForm;
-    }(jx.views.ReactiveEditDataView));
+    }(jx.views.ReactiveView));
     var FindEmployeeCombo = (function (_super) {
         __extends(FindEmployeeCombo, _super);
         function FindEmployeeCombo() {

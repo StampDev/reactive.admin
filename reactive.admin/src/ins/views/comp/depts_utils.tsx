@@ -24,7 +24,7 @@ export class CompDeptBreadCrumView extends jx.views.ReactiveView {
     render() {
 
         if (this.state.loading) {
-            return null;
+            return <i className="fa fa-spin fa-spinner fa-2x" ></i>;
         }
 
         var data = this.state.items;
@@ -181,7 +181,7 @@ export class DeptHierarchyView extends jx.views.ReactiveView{
         if (this.state.loading) {
             return <jx.views.LoaderView  />
         }
-
+        
         var data = this.state.items;
         
         var dept = _.find(data, d => {

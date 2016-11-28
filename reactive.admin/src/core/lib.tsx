@@ -505,8 +505,7 @@ export module views {
 
         }
     }
-
-
+    
 
 
     export interface ReactiveEditDataViewState extends ReactiveDataViewState {

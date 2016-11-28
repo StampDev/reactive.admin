@@ -613,5 +613,16 @@ var bx;
         });
     }
     bx.fetchKey = fetchKey;
+    function save(model, obj) {
+        var d = Q.defer();
+        obj['___class'] = model;
+        Backendless.Persistence.of(model).save(obj, new Backendless.Async(function (rst) {
+            d.resolve(obj);
+        }, function (err) {
+            d.reject(err);
+        }));
+        return d.promise;
+    }
+    bx.save = save;
 })(bx || (bx = {}));
 //# sourceMappingURL=C:/afriknet/reactive.admin.bkl/reactive.admin/js/core/utils.js.map

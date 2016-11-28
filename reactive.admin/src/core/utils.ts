@@ -931,8 +931,28 @@ module bx {
         }).fail(err => {
 
             return err;
-        });
-        
+        });        
+    }
+
+
+
+    export function save(model: any, obj: any): Q.Promise<any> {
+
+        var d = Q.defer();
+
+        obj['___class'] = model;
+
+        Backendless.Persistence.of(model).save(obj, new Backendless.Async(rst => {
+
+            d.resolve(obj);
+
+        }, err => {
+
+            d.reject(err);
+        }));
+
+        return d.promise;
+
     }
 
 }
