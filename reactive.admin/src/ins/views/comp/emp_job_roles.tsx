@@ -20,7 +20,7 @@ export class EmpJobExplorer extends jx.views.ReactiveView {
 
     constructor(props: EmpJobExplorerProps) {
         super(props);
-        this.state.data = this.props.emp['jbr']();
+        this.state.data = this.props.emp['jbr'];
     }
 
     props: EmpJobExplorerProps;

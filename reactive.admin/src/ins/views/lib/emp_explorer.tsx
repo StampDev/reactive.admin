@@ -14,7 +14,6 @@ import { OccpTreeView } from '../profiles/profile_occptree';
 
 
 
-
 export interface EmpExplorerProps extends jx.views.ReactiveViewProps {
     emp: breeze.Entity
 }
@@ -242,14 +241,14 @@ export interface DataListingProps extends jx.forms.ui.DataListProps {
     lookup_table: string,
     lookup_field: string    
 }
-export class DataListing extends jx.forms.ui.DataList {
+export class DataListing extends jx.forms.ui.XDataList {
 
 
     props: DataListingProps;
 
 
-    get_model(): string {
-        return 'usr';
+    get_model(): any {
+        return this.props.detail_table;
     }
 
 
@@ -287,17 +286,16 @@ export class DataListing extends jx.forms.ui.DataList {
             id: _.result(this.props.emp,'usrid')
         }
 
-        this.ds.exec_query({
-            where: __where,
-            expand: [this.props.detail_table]
+        this.ds.fetch_data({
+            condition: "usrid='{0}'".format(_.result(this.props.emp, 'usrid'))
         }).then(() => {
 
-            var list = this.usr[this.props.detail_table]();
+            var list = this.ds.dm.getEntities(this.props.detail_table);
 
             d.resolve(list);
 
-        });
-
+        })
+        
         return d.promise;
 
     }

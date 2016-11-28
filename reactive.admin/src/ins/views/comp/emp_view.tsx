@@ -39,7 +39,7 @@ class EmpViewForm extends jx.views.ReactiveView {
 
     constructor(props: any) {
         super(props);
-        this.state.loading = true;
+        this.state.loading = true;        
     }
 
 
@@ -108,11 +108,8 @@ class EmpViewForm extends jx.views.ReactiveView {
 
                                 <b.Col lg={7}>
 
-                                    {/*
-                                    <EmpProfessionalInfo emp={emp} />
-                                    */}
-
-
+                                    <EmpProfessionalInfo emp={emp} usr={this.state.usr} />
+                                    
                                 </b.Col>
                                 
                             </b.Row>

@@ -7,7 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '../lib/emp_explorer', './emp_job_roles'], function (require, exports, React, jx, rb, emp_explorer_1, emp_job_roles_1) {
+define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '../lib/emp_explorer'], function (require, exports, React, jx, rb, emp_explorer_1) {
     "use strict";
     var b = rb;
     var EmpProfessionalInfo = (function (_super) {
@@ -16,7 +16,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
             _super.apply(this, arguments);
         }
         EmpProfessionalInfo.prototype.render = function () {
-            var html = React.createElement("div", null, React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement("div", {className: "m-b-md"}, React.createElement("h2", null, "Professional profile")))), React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12}, React.createElement(EmpStatistics, null))), React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement(jx.views.TabControl, null, React.createElement(b.Tabs, {defaultActiveKey: 1, id: "tabs"}, React.createElement(b.Tab, {eventKey: 1, title: "Experience history"}, React.createElement("br", null), React.createElement(emp_job_roles_1.EmpJobExplorer, {owner: this, emp: this.props.emp})), React.createElement(b.Tab, {eventKey: 2, title: "Activities"}, React.createElement("br", null), React.createElement(EmpActsExplorer, {owner: this, emp: this.props.emp})), React.createElement(b.Tab, {eventKey: 3, title: "Skills"}, React.createElement("br", null), React.createElement(EmpSkillsExplorer, {owner: this, emp: this.props.emp})))))));
+            var html = React.createElement("div", null, React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement("div", {className: "m-b-md"}, React.createElement("h2", null, "Professional profile")))), React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12}, React.createElement(EmpStatistics, null))), React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement(jx.views.TabControl, null, React.createElement(b.Tabs, {defaultActiveKey: 1, id: "tabs"}, React.createElement(b.Tab, {eventKey: 1, title: "Experience history"}, React.createElement("br", null)), React.createElement(b.Tab, {eventKey: 2, title: "Activities"}, React.createElement("br", null), React.createElement(EmpActsExplorer, {owner: this, emp: this.props.emp})), React.createElement(b.Tab, {eventKey: 3, title: "Skills"}, React.createElement("br", null)))))));
             return html;
         };
         return EmpProfessionalInfo;

@@ -26,6 +26,7 @@ var _img_url = 'http://localhost';
 var utils;
 (function (utils) {
     utils.key = 'objectId';
+    utils.UsrModel = 'Users';
     utils.srv_url = _srv_url;
     utils.DBNULL = '___NULL___';
     function is_null_or_empty(val) {

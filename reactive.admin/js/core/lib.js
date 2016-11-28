@@ -2166,8 +2166,11 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
                 if (!__qry.options) {
                     __qry.options = {};
                 }
-                //__qry.options['relationsDepth'] = 2;
-                Backendless.Persistence.of(this.model).find(qry, new Backendless.Async(function (list) {
+                var __model = this.model;
+                if (__model === utils.UsrModel) {
+                    __model = Backendless.User;
+                }
+                Backendless.Persistence.of(__model).find(qry, new Backendless.Async(function (list) {
                     _.each(list.data, function (obj) {
                         _this.dm.createEntity(_this.model, obj, breeze.EntityState.Unchanged, breeze.MergeStrategy.OverwriteChanges);
                     });

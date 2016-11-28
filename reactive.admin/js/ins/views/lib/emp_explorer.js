@@ -148,7 +148,7 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
             _super.apply(this, arguments);
         }
         DataListing.prototype.get_model = function () {
-            return 'usr';
+            return this.props.detail_table;
         };
         Object.defineProperty(DataListing.prototype, "usr", {
             get: function () {
@@ -182,11 +182,10 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
             var __where = {
                 id: _.result(this.props.emp, 'usrid')
             };
-            this.ds.exec_query({
-                where: __where,
-                expand: [this.props.detail_table]
+            this.ds.fetch_data({
+                condition: "usrid='{0}'".format(_.result(this.props.emp, 'usrid'))
             }).then(function () {
-                var list = _this.usr[_this.props.detail_table]();
+                var list = _this.ds.dm.getEntities(_this.props.detail_table);
                 d.resolve(list);
             });
             return d.promise;
@@ -213,7 +212,7 @@ define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-
             $(row).attr('data-rowid', _.result(data, this.props.detail_field));
         };
         return DataListing;
-    }(jx.forms.ui.DataList));
+    }(jx.forms.ui.XDataList));
     exports.DataListing = DataListing;
     var Datalist_Find = (function (_super) {
         __extends(Datalist_Find, _super);

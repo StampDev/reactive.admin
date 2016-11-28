@@ -42,7 +42,7 @@ var _img_url = 'http://localhost';
 module utils {
 
     export const key: string = 'objectId'
-
+    export const UsrModel: string = 'Users'
 
     export const srv_url: string = _srv_url
     

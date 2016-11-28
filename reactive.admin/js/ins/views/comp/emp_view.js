@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '../../lib/ins_master_page', './emp_personal_info_view', './emp_header_info_view', '../comp/emp_edu_view'], function (require, exports, React, jx, rb, ins_master_page_1, emp_personal_info_view_1, emp_header_info_view_1, edu) {
+define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '../../lib/ins_master_page', './emp_personal_info_view', './emp_header_info_view', './emp_professional_info_view', '../comp/emp_edu_view'], function (require, exports, React, jx, rb, ins_master_page_1, emp_personal_info_view_1, emp_header_info_view_1, emp_professional_info_view_1, edu) {
     "use strict";
     var b = rb;
     var EmpView = (function (_super) {
@@ -52,7 +52,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
                 return React.createElement("i", {className: "fa fa-spin fa-spinner fa-2x"});
             }
             var emp = this.state.emp;
-            var html = React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12, className: "animated fadeInRight", style: { paddingLeft: 20, paddingRight: 20 }}, React.createElement(jx.views.IBox, null, React.createElement("div", {style: { minHeight: 700 }}, React.createElement(b.Row, null, React.createElement(b.Col, {lg: 5}, React.createElement(emp_header_info_view_1.EmpsHeaderInfo, {owner: this, emp: emp, usr: this.state.usr}), React.createElement("hr", null), React.createElement(emp_personal_info_view_1.EmpPersonalInfo, {owner: this, usr: this.state.usr}), React.createElement("hr", null), React.createElement(edu.EmpEduView, {owner: this, emp: emp})), React.createElement(b.Col, {lg: 7}))))));
+            var html = React.createElement(b.Row, null, React.createElement(b.Col, {lg: 12, className: "animated fadeInRight", style: { paddingLeft: 20, paddingRight: 20 }}, React.createElement(jx.views.IBox, null, React.createElement("div", {style: { minHeight: 700 }}, React.createElement(b.Row, null, React.createElement(b.Col, {lg: 5}, React.createElement(emp_header_info_view_1.EmpsHeaderInfo, {owner: this, emp: emp, usr: this.state.usr}), React.createElement("hr", null), React.createElement(emp_personal_info_view_1.EmpPersonalInfo, {owner: this, usr: this.state.usr}), React.createElement("hr", null), React.createElement(edu.EmpEduView, {owner: this, emp: emp})), React.createElement(b.Col, {lg: 7}, React.createElement(emp_professional_info_view_1.EmpProfessionalInfo, {emp: emp, usr: this.state.usr})))))));
             return html;
         };
         EmpViewForm.prototype.on_notify = function () {

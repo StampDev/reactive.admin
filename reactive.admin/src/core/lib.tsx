@@ -3574,6 +3574,7 @@ export module bx {
             super(model);
         }
 
+
         private __dm: breeze.EntityManager;
         get dm(): breeze.EntityManager {
 
@@ -3596,7 +3597,7 @@ export module bx {
         
 
         fetch_data(qry?: Backendless.DataQueryValueI): Q.Promise<breeze.Entity[]> {
-
+            
             if (!datastore.Store.hasMetadataFor(this.model)) {
 
                 return this.fetch_metadata().then(args => {
@@ -3623,13 +3624,17 @@ export module bx {
                 __qry.options = {}
             }
 
-            //__qry.options['relationsDepth'] = 2;
+            var __model: any = this.model;
+
+            if (__model === utils.UsrModel) {
+                __model = Backendless.User;
+            }
 
 
-            Backendless.Persistence.of(this.model).find(qry, new Backendless.Async((list: any) => {
+            Backendless.Persistence.of(__model).find(qry, new Backendless.Async((list: any) => {
 
                 _.each(list.data, obj => {
-                    
+
                     this.dm.createEntity(this.model, obj, breeze.EntityState.Unchanged, breeze.MergeStrategy.OverwriteChanges);
                 });
 

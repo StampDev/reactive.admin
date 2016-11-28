@@ -13,7 +13,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
         __extends(EmpJobExplorer, _super);
         function EmpJobExplorer(props) {
             _super.call(this, props);
-            this.state.data = this.props.emp['jbr']();
+            this.state.data = this.props.emp['jbr'];
         }
         Object.defineProperty(EmpJobExplorer.prototype, "is_new", {
             get: function () {

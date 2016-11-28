@@ -13,11 +13,16 @@ import { EmpExplorer, Datalist_Find, Datalist_FindProps } from '../lib/emp_explo
 import { EmpJobExplorer, EmpJobExplorerProps } from './emp_job_roles'; 
 
 export interface EmpProfessionalInfoProps extends jx.views.ReactiveViewProps {
-    emp: breeze.Entity
+    emp: breeze.Entity,
+    usr: any
+}
+interface EmpProfessionalInfoState extends jx.views.ReactiveViewState {
+    usr: any
 }
 export class EmpProfessionalInfo extends jx.views.ReactiveView {
 
     props: EmpProfessionalInfoProps;
+    state: EmpProfessionalInfoState;
 
 
     render() {
@@ -48,8 +53,9 @@ export class EmpProfessionalInfo extends jx.views.ReactiveView {
                                 <b.Tab eventKey={1} title="Experience history">
 
                                     <br />
-
+                                    {/*
                                     <EmpJobExplorer owner={this} emp={this.props.emp} />
+                                    */}
 
                                 </b.Tab>
 
@@ -64,8 +70,11 @@ export class EmpProfessionalInfo extends jx.views.ReactiveView {
                                 <b.Tab eventKey={3} title="Skills">
 
                                     <br />
-
+                                    
+                                    {/*
                                     <EmpSkillsExplorer owner={this} emp={this.props.emp} />
+                                    */}
+                
 
                                 </b.Tab>
                                 
