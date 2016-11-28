@@ -137,7 +137,7 @@ export class NewEmployeeView extends jx.views.ReactiveView {
                     compid: this.app.CompId,
                     deptid: this.props.deptid
                 }
-
+                
 
                 Backendless.Persistence.of('emp').save(emp,
 

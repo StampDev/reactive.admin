@@ -215,4 +215,4 @@ define(["require", "exports", 'react', 'react-bootstrap', '../../../core/lib', '
     }(jx.views.ReactiveView));
     exports.ProfileEditBasicInfo = ProfileEditBasicInfo;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_basicinfo.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/ins/views/profiles/profile_edit_basicInfo.js.map

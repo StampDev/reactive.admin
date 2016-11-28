@@ -34,4 +34,4 @@ define(["require", "exports", 'react', '../../qw.cli/app', './inspage'], functio
     }(cli.AppBase));
     exports.InsApp = InsApp;
 });
-//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.ins/app/insApp.js.map
+//# sourceMappingURL=C:/Developper/reactive.admin.bkl/reactive.admin/js/qw.ins/app/insapp.js.map
