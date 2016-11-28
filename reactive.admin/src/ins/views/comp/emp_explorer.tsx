@@ -127,7 +127,7 @@ class Explorer extends jx.views.ReactiveView {
             } break;
 
 
-            case 'reload': {
+            case 'emp-reload': {
 
                 this.setState({
                     loading: true

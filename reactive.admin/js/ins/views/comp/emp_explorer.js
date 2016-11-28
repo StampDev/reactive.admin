@@ -52,7 +52,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap', '
                         }
                     }
                     break;
-                case 'reload':
+                case 'emp-reload':
                     {
                         this.setState({
                             loading: true

@@ -82,6 +82,9 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
                     };
                     Backendless.Persistence.of('emp').save(emp, new Backendless.Async(function (rst) {
                         toastr.success('Employee successfully invited');
+                        _this.broadcast({
+                            action: 'emp-reload'
+                        });
                         d.resolve(true);
                     }, function (err) {
                         toastr.error(JSON.stringify(err));

@@ -145,6 +145,10 @@ export class NewEmployeeView extends jx.views.ReactiveView {
 
                         toastr.success('Employee successfully invited');
 
+                        this.broadcast({
+                            action: 'emp-reload'
+                        });
+
                         d.resolve(true);
 
                     }, err => {
