@@ -1219,6 +1219,31 @@ export module app {
 
             return [];
         }
+        
+
+        add_corporate_account(args: {
+            compname: string,            
+            usrname: string,
+            usrsurname: string,
+            usremail: string,
+            usrpassword: string
+        }) {
+            
+            var user = _.extend(new Backendless.User(), {
+                name: args.usrname,
+                surname: args.usrsurname,
+                email: args.usremail,
+                password: args.usrpassword
+            });
+
+            Backendless.UserService.register(user, new Backendless.Async(rst => {
+
+
+            }, err => {
+
+
+            }));            
+        }
     }
 
 }

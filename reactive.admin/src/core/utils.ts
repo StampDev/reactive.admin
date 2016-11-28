@@ -899,10 +899,11 @@ class Test {
 
 
 module bx {
+    
 
-    export function fetch(model: string, qry?: Backendless.DataQueryValueI) {
+    export function fetch(model: any, qry?: Backendless.DataQueryValueI): Q.Promise<any[]> {
 
-        var d = Q.defer();
+        var d = Q.defer < any[]>();
 
         Backendless.Persistence.of(model).find(qry, new Backendless.Async(rst => {
 

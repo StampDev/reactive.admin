@@ -737,6 +737,17 @@ define(["require", "exports", 'react', 'react-dom', 'react-bootstrap', "url-patt
             Application.prototype.get_menus = function () {
                 return [];
             };
+            Application.prototype.add_corporate_account = function (args) {
+                var user = _.extend(new Backendless.User(), {
+                    name: args.usrname,
+                    surname: args.usrsurname,
+                    email: args.usremail,
+                    password: args.usrpassword
+                });
+                Backendless.UserService.register(user, new Backendless.Async(function (rst) {
+                }, function (err) {
+                }));
+            };
             return Application;
         }());
         app_1.Application = Application;

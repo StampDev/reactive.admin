@@ -149,24 +149,24 @@ class EmpDatalist extends jx.forms.ui.DataList {
     }
 
 
-    //createdCell(cell: Node, cellData: any, rowData: any, row: number, col: number) {
+    createdCell(cell: Node, cellData: any, rowData: any, row: number, col: number) {
 
-    //    if (col === 1) {
+        if (col === 1) {
 
-    //        var html = <EmpRowView emp={rowData} owner={this} />;
+            var html = <EmpRowView emp={rowData} owner={this} />;
 
-    //        ReactDOM.render(html, $(cell)[0]);
-    //    }
+            ReactDOM.render(html, $(cell)[0]);
+        }
 
-    //    if (col == 2) {
+        //if (col == 2) {
 
-    //        var html = <RowDeptInfo owner={this} emp={rowData}  />;
+        //    var html = <RowDeptInfo owner={this} emp={rowData}  />;
 
-    //        ReactDOM.render(html, $(cell)[0]);
+        //    ReactDOM.render(html, $(cell)[0]);
 
-    //    }
+        //}
 
-    //}
+    }
 
 
     createdRow(row: Node, data: any[] | Object, dataIndex: number) {
@@ -253,10 +253,13 @@ class EmpDatalist extends jx.forms.ui.DataList {
 interface EmpRowViewProps extends jx.views.ReactiveViewProps {
     emp: breeze.Entity
 }
+interface EmpRowViewState extends jx.views.ReactiveViewState {
+    usr: any;
+}
 class EmpRowView extends jx.views.ReactiveView {
 
     props: EmpRowViewProps;
-
+    state: EmpRowViewState;
 
     constructor(props: EmpRowViewProps) {
         super(props);
@@ -281,8 +284,8 @@ class EmpRowView extends jx.views.ReactiveView {
         }
 
 
-        var usr = this.usr_dx.findkey(_.result(this.props.emp, 'usrid'));
-
+        var usr = this.state.usr;
+        
 
         var usrstatus = 'Status: pending';
 
@@ -297,7 +300,7 @@ class EmpRowView extends jx.views.ReactiveView {
                 break;
         }
 
-        var url = '/company/employees/employee/{0}'.format(_.result(this.props.emp, 'empid'));
+        var url = '/company/employees/employee/{0}'.format(_.result(this.props.emp, 'objectId'));
 
         var html =
             <div>
@@ -311,8 +314,8 @@ class EmpRowView extends jx.views.ReactiveView {
                             <td>
                                 <h3>
                                     <a href={url}>
-                                        <span className="m-r-sm" >{_.result(usr, 'usrname') }</span>
-                                        <span>{_.result(usr, 'usrsurname') }</span>
+                                        <span className="m-r-sm" >{_.result(usr, 'name') }</span>
+                                        <span>{_.result(usr, 'name') }</span>
                                     </a>
                                     <div>
                                         <small>{usrstatus}</small>
@@ -337,16 +340,17 @@ class EmpRowView extends jx.views.ReactiveView {
 
                 if (this.state.loading) {
 
-                    this.usr_dx.fetch_data({
-                        where: {
-                            'id': { eq: _.result(this.props.emp, 'usrid') }
-                        }
-                    }).then(() => {
+                    bx.fetch(Backendless.User, {
+                        condition: "objectId='{0}'".format(_.result(this.props.emp, 'usrid'))
+                    }).then(data => {
 
                         this.setState({
-                            loading: false
+                            loading: false,
+                            usr: data[0]
                         });
+                        
                     });
+                    
                 }
 
             } break;

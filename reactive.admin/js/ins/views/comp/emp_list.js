@@ -6,7 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], function (require, exports, React, jx, rb) {
+define(["require", "exports", 'react', 'react-dom', '../../../core/lib', 'react-bootstrap'], function (require, exports, React, ReactDOM, jx, rb) {
     "use strict";
     var b = rb;
     (function (EmpListFilter) {
@@ -86,16 +86,16 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
             enumerable: true,
             configurable: true
         });
-        //createdCell(cell: Node, cellData: any, rowData: any, row: number, col: number) {
-        //    if (col === 1) {
-        //        var html = <EmpRowView emp={rowData} owner={this} />;
-        //        ReactDOM.render(html, $(cell)[0]);
-        //    }
-        //    if (col == 2) {
-        //        var html = <RowDeptInfo owner={this} emp={rowData}  />;
-        //        ReactDOM.render(html, $(cell)[0]);
-        //    }
-        //}
+        EmpDatalist.prototype.createdCell = function (cell, cellData, rowData, row, col) {
+            if (col === 1) {
+                var html = React.createElement(EmpRowView, {emp: rowData, owner: this});
+                ReactDOM.render(html, $(cell)[0]);
+            }
+            //if (col == 2) {
+            //    var html = <RowDeptInfo owner={this} emp={rowData}  />;
+            //    ReactDOM.render(html, $(cell)[0]);
+            //}
+        };
         EmpDatalist.prototype.createdRow = function (row, data, dataIndex) {
             _super.prototype.createdRow.call(this, row, data, dataIndex);
             $(row).attr('data-rowid', _.result(data, utils.key));
@@ -161,7 +161,7 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
             if (this.state.loading) {
                 return React.createElement("i", {className: "fa fa-spin fa-spinner"});
             }
-            var usr = this.usr_dx.findkey(_.result(this.props.emp, 'usrid'));
+            var usr = this.state.usr;
             var usrstatus = 'Status: pending';
             switch (_.result(usr, 'usrstatus')) {
                 case 0:
@@ -170,8 +170,8 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
                     usrstatus = 'Status: active';
                     break;
             }
-            var url = '/company/employees/employee/{0}'.format(_.result(this.props.emp, 'empid'));
-            var html = React.createElement("div", null, React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, React.createElement("span", {className: "glyphicon glyphicon-user m-r-md", style: { fontSize: '3em' }})), React.createElement("td", null, React.createElement("h3", null, React.createElement("a", {href: url}, React.createElement("span", {className: "m-r-sm"}, _.result(usr, 'usrname')), React.createElement("span", null, _.result(usr, 'usrsurname'))), React.createElement("div", null, React.createElement("small", null, usrstatus))))))));
+            var url = '/company/employees/employee/{0}'.format(_.result(this.props.emp, 'objectId'));
+            var html = React.createElement("div", null, React.createElement("table", null, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, React.createElement("span", {className: "glyphicon glyphicon-user m-r-md", style: { fontSize: '3em' }})), React.createElement("td", null, React.createElement("h3", null, React.createElement("a", {href: url}, React.createElement("span", {className: "m-r-sm"}, _.result(usr, 'name')), React.createElement("span", null, _.result(usr, 'name'))), React.createElement("div", null, React.createElement("small", null, usrstatus))))))));
             return html;
         };
         EmpRowView.prototype.on_notify = function () {
@@ -180,13 +180,12 @@ define(["require", "exports", 'react', '../../../core/lib', 'react-bootstrap'], 
                 case jx.constants.events.view_initialized:
                     {
                         if (this.state.loading) {
-                            this.usr_dx.fetch_data({
-                                where: {
-                                    'id': { eq: _.result(this.props.emp, 'usrid') }
-                                }
-                            }).then(function () {
+                            bx.fetch(Backendless.User, {
+                                condition: "objectId='{0}'".format(_.result(this.props.emp, 'usrid'))
+                            }).then(function (data) {
                                 _this.setState({
-                                    loading: false
+                                    loading: false,
+                                    usr: data[0]
                                 });
                             });
                         }
